@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grammar Tools — Polish B1 Exam Prep</title>
+  <link rel="canonical" href="https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-tools.html">
+  <link rel="stylesheet" href="../css/style.css">
+  <meta name="description" content="Polish B1 grammar tools: look up any verb's full conjugation with aspect pairs, and check any noun's gender and complete 7-case declension table.">
+  <meta name="author" content="Ahmed Samy Bakry Mahmoud">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#7C3AED">
+  <style>
+    /* ── Tool section colours ── */
+    .tool-verb   { --tc: #7C3AED; }
+    .tool-gender { --tc: #0D9488; }
+
+    .tool-section { margin-bottom: 52px; }
+    .tool-card { border-top: 4px solid var(--tc) !important; }
+    .tool-title { color: var(--tc); font-size: 1.08rem; margin-bottom: 6px; display:flex; align-items:center; gap:10px; }
+    .tool-hint  { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; }
+
+    /* Input row */
+    .tool-row   { display:flex; gap:10px; align-items:stretch; flex-wrap:wrap; }
+    .tool-input { flex:1; min-width:200px; padding:10px 14px; font-size:1rem; font-family:inherit;
+                  border:2px solid var(--border); border-radius:8px; background:var(--bg-page);
+                  color:var(--text); transition:border-color 0.15s; }
+    .tool-input:focus { outline:none; border-color:var(--tc,var(--clr-primary));
+                        box-shadow:0 0 0 3px color-mix(in srgb, var(--tc,var(--clr-primary)) 12%, transparent); }
+    .tool-btn   { padding:10px 22px; border-radius:8px; border:none; cursor:pointer;
+                  background:var(--tc); color:#fff; font-weight:700; font-size:0.92rem;
+                  font-family:inherit; transition:opacity 0.15s; white-space:nowrap; }
+    .tool-btn:hover:not(:disabled) { opacity:0.88; }
+    .tool-btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+    /* Result panels */
+    .tool-result { margin-top:20px; display:none; }
+
+    /* Conjugation / declension tables */
+    .gt-table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .gt-table th { background:var(--bg-page); padding:7px 11px; font-weight:700; text-align:center;
+                   border:1px solid var(--border); font-size:0.78rem; color:var(--text-muted); }
+    .gt-table th.row-head { text-align:left; }
+    .gt-table td { padding:7px 11px; border:1px solid var(--border); text-align:center; vertical-align:middle; }
+    .gt-table td.row-label { font-weight:600; color:var(--text-muted); font-size:0.78rem;
+                             text-align:left; white-space:nowrap; background:var(--bg-page); }
+    .gt-table td.na { color:var(--text-muted); font-style:italic; font-size:0.76rem; }
+    .gt-table tr:nth-child(even) td { background:color-mix(in srgb, var(--bg-card) 60%, var(--bg-page)); }
+
+    /* Meta badges — solid fill so they read in both light and dark themes */
+    .result-meta { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+    .rbadge { padding:4px 13px; border-radius:20px; font-size:0.78rem; font-weight:700;
+              border:none; color:#fff; }
+    .rbadge-impf      { background:#1D4ED8; }
+    .rbadge-perf      { background:#B91C1C; }
+    .rbadge-masc-anim { background:#6D28D9; }
+    .rbadge-masc-inan { background:#1E40AF; }
+    .rbadge-fem       { background:#9D174D; }
+    .rbadge-neut      { background:#0F766E; }
+
+    /* Theme-aware result titles */
+    .result-verb-title   { color:#5B21B6; }
+    .result-gender-title { color:#0F766E; }
+    [data-theme="dark"] .result-verb-title   { color:#A78BFA; }
+    [data-theme="dark"] .result-gender-title { color:#2DD4BF; }
+
+    /* Aspect pair expandable */
+    .pair-details summary::-webkit-details-marker { display:none; }
+    .pair-details summary { cursor:pointer; padding:10px 15px; background:var(--bg-card);
+                            border:1px solid var(--border); border-radius:8px;
+                            font-weight:600; font-size:0.88rem; list-style:none;
+                            display:flex; align-items:center; gap:8px; user-select:none; }
+    .pair-details[open] summary { border-radius:8px 8px 0 0; }
+    .pair-details .pair-body { padding:18px; background:var(--bg-card); border:1px solid var(--border);
+                               border-top:none; border-radius:0 0 8px 8px; }
+
+    /* Suggestion chips */
+    .suggestion-chip { padding:5px 14px; border-radius:16px; border:1.5px solid var(--clr-primary);
+                       background:transparent; color:var(--clr-primary); font-size:0.85rem;
+                       cursor:pointer; font-family:inherit; font-weight:700; transition:all 0.15s; }
+    .suggestion-chip:hover { background:var(--clr-primary); color:#fff; }
+
+    /* Spell-check info dropdown */
+    .sc-info summary::-webkit-details-marker { display:none; }
+    .sc-info summary { cursor:pointer; padding:9px 14px; background:var(--bg-card);
+                       border:1px solid var(--border); border-radius:7px; font-weight:600;
+                       font-size:0.84rem; list-style:none; display:flex; align-items:center;
+                       gap:8px; user-select:none; color:var(--text-muted); }
+    .sc-info[open] summary { border-radius:7px 7px 0 0; }
+    .sc-info .sc-body { padding:16px 18px; background:var(--bg-card); border:1px solid var(--border);
+                        border-top:none; border-radius:0 0 7px 7px; font-size:0.86rem; line-height:1.75; }
+
+    /* Loading animation */
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .loading-pulse { animation:pulse 1.4s ease-in-out infinite; }
+
+    /* Cases list */
+    .governs-list { margin:14px 0 0; padding:0; list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+    .governs-list li { padding:6px 12px; background:var(--bg-page); border:1px solid var(--border);
+                       border-left:3px solid var(--clr-secondary); border-radius:0 6px 6px 0;
+                       font-size:0.85rem; color:var(--text); }
+
+    /* Note box */
+    .note-box { margin-top:14px; padding:11px 14px; background:var(--bg-page);
+                border:1px solid color-mix(in srgb, #F59E0B 35%, transparent);
+                border-left:3px solid #D97706; border-radius:0 6px 6px 0;
+                font-size:0.86rem; color:var(--text); }
+
+    /* Adj tip box */
+    .adj-tip { margin-top:14px; padding:11px 14px; background:var(--bg-page);
+               border:1px solid color-mix(in srgb, #0D9488 35%, transparent);
+               border-left:3px solid #0D9488; border-radius:0 6px 6px 0;
+               font-size:0.86rem; color:var(--text); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <a class="navbar-brand" href="../index.html">
+    <div class="brand-flag" aria-hidden="true"><div class="flag-white"></div><div class="flag-red"></div></div>
+    Polish B1
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="../index.html">🏠 Overview</a>
+    <a class="nav-link" href="listening.html">🎧 Listening</a>
+    <a class="nav-link" href="reading.html">📖 Reading</a>
+    <div class="nav-grammar-group"><a class="nav-link" href="grammar-overview.html">📚 Grammar</a><button class="nav-grammar-arrow" onclick="toggleGrammarMenu(event)" aria-label="Grammar sub-pages"></button><div class="nav-grammar-dropdown" id="nav-grammar-dropdown"><a href="grammar-overview.html">📚 Przegląd (Overview)</a><a href="grammar-instrumental.html">① Narzędnik — Instrumental</a><a href="grammar-accusative.html">② Biernik — Accusative</a><a href="grammar-genitive.html">③ Dopełniacz — Genitive</a><a href="grammar-aspects.html">④ Aspekty — Verb Aspects</a><a href="grammar-dative.html">⑤ Celownik — Dative</a><a href="grammar-locative.html">⑥ Miejscownik — Locative</a><a href="grammar-motion.html">⑦ Ruchu — Motion</a><a href="grammar-practice.html" style="color:var(--clr-secondary);font-weight:600;">✍️ Ćwiczenia — Practice</a><a href="grammar-tools.html" style="color:#7C3AED;font-weight:600;">🔧 Narzędzia — Tools</a></div></div>
+    <a class="nav-link" href="writing.html">✍️ Writing</a>
+    <a class="nav-link" href="speaking.html">🗣️ Speaking</a>
+    <a class="nav-link" href="vocabulary.html">📝 Vocabulary</a>
+    <a class="nav-link" href="study-plan.html">📅 Study Plan</a>
+    <a class="nav-link" href="exam-info.html">🎓 Take the Exam</a>
+    <a class="nav-link" href="mock-exam.html">🎯 Mock Exam</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-theme" id="btn-theme" aria-label="Toggle dark/light mode" title="Toggle theme">🌙</button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="../index.html">🏠 Overview</a>
+  <div class="mobile-section-label">Exam Subtests</div>
+  <a href="listening.html">🎧 Listening</a>
+  <a href="reading.html">📖 Reading</a>
+  <a href="grammar-overview.html">📚 Grammar</a>
+  <a href="grammar-practice.html">✍️ Grammar Practice</a>
+  <a href="grammar-tools.html">🔧 Grammar Tools</a>
+  <a href="writing.html">✍️ Writing</a>
+  <a href="speaking.html">🗣️ Speaking</a>
+  <div class="mobile-section-label">Resources</div>
+  <a href="vocabulary.html">📝 Vocabulary</a>
+  <a href="study-plan.html">📅 Study Plan</a>
+  <a href="exam-info.html">🎓 Take the Exam</a>
+  <a href="mock-exam.html">🎯 Mock Exam</a>
+</div>
+
+<main class="page-wrapper">
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="../index.html">🏠 Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="grammar-overview.html">Grammar</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Grammar Tools</span>
+  </nav>
+
+  <div class="page-header">
+    <h1>Grammar Tools — Narzędzia Gramatyczne</h1>
+    <p>Two AI-powered reference tools in one place. Look up any Polish verb to get its full conjugation table with its aspect pair, or look up any noun to see its gender and complete 7-case declension.</p>
+    <div class="header-meta">
+      <span class="header-badge">AI-Powered</span>
+      <span class="header-badge">Verb Conjugator</span>
+      <span class="header-badge">Noun Declension</span>
+      <span class="header-badge">Free</span>
+    </div>
+  </div>
+
+  <div class="tip-box" style="border-left-color:var(--clr-secondary); margin-bottom:36px;">
+    <strong>🤖 Instant AI grammar reference — free, no sign-in required:</strong> Type any Polish verb or noun and click the button. Results appear in a few seconds — full tables, aspect pairs, and adjective agreement tips included.
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — VERB CONJUGATOR
+  ══════════════════════════════════════════ -->
+  <section class="tool-section tool-verb" aria-labelledby="verb-heading">
+
+    <h2 class="section-title" id="verb-heading">🔵 Verb Conjugator — Koniugacja Czasownika</h2>
+    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:20px;">
+      Enter any Polish verb in its infinitive form (the base form ending in <strong>-ć</strong> or <strong>-c</strong>) — for example <em>mówić, iść, kupić, mieszkać, wiedzieć</em>. You will get the full conjugation table across all tenses, plus the aspect pair if one exists.
+    </p>
+
+    <div class="card tool-card">
+      <h3 class="tool-title">🔵 Conjugate a verb — Skoniuguj czasownik</h3>
+      <p class="tool-hint">Type the infinitive form of the verb you want to look up. The AI will return all tenses and the aspect pair automatically.</p>
+
+      <div class="tool-row">
+        <input type="text" id="verb-input" class="tool-input"
+               placeholder="e.g. mówić, iść, kupić, mieszkać, zrozumieć…"
+               lang="pl" spellcheck="true">
+        <button id="verb-btn" class="tool-btn">🔍 Conjugate</button>
+      </div>
+      <details class="sc-info" style="margin-top:10px;">
+        <summary>🔤 Polish spell-check — how to enable it in your browser</summary>
+        <div class="sc-body">
+          <p style="margin:0 0 10px;">As you type, Polish spell-check automatically marks real typing mistakes — for example <em>mówć</em> instead of <em>mówić</em>. Correctly spelled Polish words are left untouched.</p>
+          <p style="margin:0 0 10px;font-weight:600;color:var(--clr-primary);">⚠️ Seeing red underlines under correct Polish words like <em>mówić</em> or <em>iść</em>?</p>
+          <p style="margin:0 0 12px;color:var(--text-muted);">Your browser doesn't have the Polish dictionary installed yet. The fix takes 30 seconds and only needs to be done once:</p>
+          <div style="background:rgba(29,78,216,0.06);border-left:3px solid var(--clr-secondary);border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:10px;">
+            <strong style="display:block;margin-bottom:8px;color:var(--clr-secondary);">Chrome / Edge — one-time setup:</strong>
+            <ol style="margin:0;padding-left:20px;line-height:2.3;">
+              <li>Open browser <strong>Settings</strong> → <strong>Languages</strong></li>
+              <li>Click <strong>"Add languages"</strong> → search <strong>Polish</strong> → Add</li>
+              <li>Toggle on <strong>"Use this language for spell check"</strong></li>
+              <li>Reload this page — done ✅</li>
+            </ol>
+          </div>
+          <p style="margin:0;color:var(--text-muted);font-size:0.82rem;">💡 Once Polish is added, the spell-checker works correctly everywhere in your browser — not just on this page.</p>
+        </div>
+      </details>
+      <p style="font-size:0.76rem; color:var(--text-muted); margin-top:8px;">Press Enter to look up</p>
+    </div>
+
+    <div id="verb-result" class="tool-result"></div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 — WORD GENDER & DECLENSION
+  ══════════════════════════════════════════ -->
+  <section class="tool-section tool-gender" aria-labelledby="gender-heading">
+
+    <h2 class="section-title" id="gender-heading">🟢 Noun & Adjective Lookup — Odmiana</h2>
+    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:20px;">
+      Enter any Polish <strong>noun</strong> — for example <em>kot, kobieta, miasto, brat, dziecko</em> — to get its gender and full 7-case declension. Or enter any <strong>adjective</strong> — for example <em>dobry, nowy, odważny, piękny</em> — to get its full declension across all genders and cases.
+    </p>
+
+    <div class="card tool-card">
+      <h3 class="tool-title">🟢 Look up a noun or adjective — Sprawdź odmianę</h3>
+      <p class="tool-hint">Type any Polish noun or adjective in its base (nominative) form. For nouns: full 7-case table + adjective agreement tip. For adjectives: all genders and cases in one table.</p>
+
+      <div class="tool-row">
+        <input type="text" id="gender-input" class="tool-input"
+               placeholder="Noun: kot, kobieta, miasto — or — Adjective: dobry, nowy, odważny…"
+               lang="pl" spellcheck="true">
+        <button id="gender-btn" class="tool-btn">🔍 Look up</button>
+      </div>
+      <details class="sc-info" style="margin-top:10px;">
+        <summary>🔤 Polish spell-check — how to enable it in your browser</summary>
+        <div class="sc-body">
+          <p style="margin:0 0 10px;">As you type, Polish spell-check automatically marks real typing mistakes — for example <em>kot</em> is correct, <em>kott</em> would be flagged. Correctly spelled Polish words are left untouched.</p>
+          <p style="margin:0 0 10px;font-weight:600;color:var(--clr-primary);">⚠️ Seeing red underlines under correct Polish words like <em>kobieta</em> or <em>miasto</em>?</p>
+          <p style="margin:0 0 12px;color:var(--text-muted);">Your browser doesn't have the Polish dictionary installed yet. The fix takes 30 seconds and only needs to be done once:</p>
+          <div style="background:rgba(29,78,216,0.06);border-left:3px solid var(--clr-secondary);border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:10px;">
+            <strong style="display:block;margin-bottom:8px;color:var(--clr-secondary);">Chrome / Edge — one-time setup:</strong>
+            <ol style="margin:0;padding-left:20px;line-height:2.3;">
+              <li>Open browser <strong>Settings</strong> → <strong>Languages</strong></li>
+              <li>Click <strong>"Add languages"</strong> → search <strong>Polish</strong> → Add</li>
+              <li>Toggle on <strong>"Use this language for spell check"</strong></li>
+              <li>Reload this page — done ✅</li>
+            </ol>
+          </div>
+          <p style="margin:0;color:var(--text-muted);font-size:0.82rem;">💡 Once Polish is added, the spell-checker works correctly everywhere in your browser — not just on this page.</p>
+        </div>
+      </details>
+      <p style="font-size:0.76rem; color:var(--text-muted); margin-top:8px;">Press Enter to look up</p>
+    </div>
+
+    <div id="gender-result" class="tool-result"></div>
+
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-dots"></div><div class="sf-circle1"></div><div class="sf-circle2"></div>
+  <div class="sf-main">
+    <div class="sf-author"><div class="sf-photo-wrap"><img src="../assets/Ahmed%20Samy%20Bakry%20Mahmoud.jpg" alt="Ahmed Samy Bakry Mahmoud"></div></div>
+    <div class="sf-right">
+      <div class="sf-page-title">Polish <span>B1</span> Exam Prep</div>
+      <div class="sf-page-sub">Language Exam &nbsp;&middot;&nbsp; Complete Guide</div>
+      <div class="sf-author-credit">Made by: <strong>Ahmed Samy Bakry Mahmoud</strong></div>
+      <div class="sf-contacts-label">My Social Contacts</div>
+      <div class="sf-social-grid">
+        <a href="https://www.instagram.com/serenitydiver/" class="sf-link" target="_blank" rel="noopener" style="border-color:#E1306C35;"><span class="sf-link-icon" style="background:#E1306C20;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E1306C" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">Instagram</span><span class="sf-link-handle">serenitydiver</span></span></a>
+        <a href="https://www.linkedin.com/in/java-msdt/" class="sf-link" target="_blank" rel="noopener" style="border-color:#0A66C235;"><span class="sf-link-icon" style="background:#0A66C220;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#0A66C2" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">LinkedIn</span><span class="sf-link-handle">java-msdt</span></span></a>
+        <a href="https://www.youtube.com/@Status-Code" class="sf-link" target="_blank" rel="noopener" style="border-color:#FF000035;"><span class="sf-link-icon" style="background:#FF000018;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FF0000" xmlns="http://www.w3.org/2000/svg"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">YouTube</span><span class="sf-link-handle">@Status-Code</span></span></a>
+        <a href="https://www.facebook.com/AhmedSamySerenity" class="sf-link" target="_blank" rel="noopener" style="border-color:#1877F235;"><span class="sf-link-icon" style="background:#1877F220;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#1877F2" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">Facebook</span><span class="sf-link-handle">AhmedSamySerenity</span></span></a>
+      </div>
+    </div>
+  </div>
+  <div class="sf-disclaimer">This site is designed for general informational purposes to streamline preparation strategy for the Long-Term EU Resident Permit language requirements in Poland. Exam center details, registration fees, and session schedules are subject to change — always verify the latest information directly with the relevant institution before booking.</div>
+  <div class="sf-flag-bottom"></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+const GROQ_KEY = 'GROQ_KEY_REMOVED_FROM_HISTORY';
+const PRONOUNS = ['ja', 'ty', 'on/ona/ono', 'my', 'wy', 'oni/one'];
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showLoading(panelId, label) {
+  const el = document.getElementById(panelId);
+  el.style.display = 'block';
+  el.innerHTML = `<div style="padding:18px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:14px;color:var(--text-muted);font-size:0.9rem;">
+    <span class="loading-pulse" style="font-size:1.5rem;">🤖</span>
+    <div><strong style="color:var(--text);display:block;margin-bottom:3px;">Looking up ${esc(label)}…</strong>This usually takes 2–4 seconds.</div></div>`;
+}
+
+function showError(panelId, msg, type) {
+  const colors = { warn:'#D97706', error:'#DC2626' };
+  const el = document.getElementById(panelId);
+  el.style.display = 'block';
+  el.innerHTML = `<div style="padding:14px 18px;background:rgba(0,0,0,0.04);border-left:4px solid ${colors[type]||'#D97706'};border-radius:0 8px 8px 0;font-size:0.9rem;">⚠️ ${esc(msg)}</div>`;
+}
+
+async function callGroq(prompt, maxTokens) {
+  const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+    body: JSON.stringify({
+      model: 'openai/gpt-oss-120b',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.1,
+      max_tokens: maxTokens
+    })
+  });
+
+  if (resp.status === 429) throw { code: 429 };
+  if (resp.status === 503) throw { code: 503 };
+  if (!resp.ok) throw { code: resp.status };
+
+  const data = await resp.json();
+  const raw = data?.choices?.[0]?.message?.content || '';
+  const m = raw.match(/\{[\s\S]*\}/);
+  if (!m) throw { code: 'parse' };
+  return JSON.parse(m[0]);
+}
+
+function handleApiError(panelId, err) {
+  if (err?.code === 429) {
+    showError(panelId, 'The daily AI limit has been reached. The service resets at midnight.', 'warn');
+  } else if (err?.code === 503) {
+    showError(panelId, 'The AI service is briefly overloaded — wait a few seconds and try again.', 'warn');
+  } else if (err?.code === 'parse') {
+    showError(panelId, 'Could not parse AI response. Please try again.', 'error');
+  } else {
+    showError(panelId, 'Something went wrong. Check your connection and try again.', 'error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// VERB CONJUGATION
+// ═══════════════════════════════════════════════════════
+function buildVerbPrompt(v) {
+  return `You are a Polish grammar reference tool. Provide the full conjugation for the Polish verb: "${v}"
+Respond ONLY with valid JSON — no markdown, no code block, no extra text before or after.
+
+If "${v}" is NOT a Polish verb in its infinitive form, detect what it is and respond ONLY with this JSON (no conjugation fields):
+{"error":true,"wordType":"TYPE","message":"one short sentence explaining what was detected","suggestions":["up to 3 correct Polish verb infinitives — closest matches or empty array"]}
+TYPE must be one of: "conjugated_verb" | "noun" | "adjective" | "english" | "unknown"
+Examples:
+- "mówi" → {"error":true,"wordType":"conjugated_verb","message":"mówi is the 3rd person singular present of mówić — enter the infinitive instead","suggestions":["mówić"]}
+- "mówiłem" → {"error":true,"wordType":"conjugated_verb","message":"mówiłem is the past tense masculine first person form of mówić","suggestions":["mówić"]}
+- "kot" → {"error":true,"wordType":"noun","message":"kot is a noun, not a verb — try the noun lookup section below","suggestions":[]}
+- "dobry" → {"error":true,"wordType":"adjective","message":"dobry is an adjective, not a verb","suggestions":[]}
+- "run" → {"error":true,"wordType":"english","message":"run is an English word — the Polish equivalent is biegać or biec","suggestions":["biegać","biec"]}
+- "speak" → {"error":true,"wordType":"english","message":"speak is English — try mówić or rozmawiać in Polish","suggestions":["mówić","rozmawiać"]}
+
+Otherwise respond with ONLY this JSON. All conjugation arrays have exactly 6 elements in order [ja, ty, on/ona/ono, my, wy, oni/one]. Use null for impossible forms (e.g. imperative 1sg, 3sg, 3pl).
+
+{
+  "infinitive": "...",
+  "aspect": "imperfective" or "perfective",
+  "aspectPair": "..." or null,
+  "tenses": {
+    "present": [...] or null (imperfective verbs have present tense; perfective do not — set to null),
+    "future": [...] (imperfective: będę/będziesz/będzie/będziemy/będziecie/będą + infinitive; perfective: the present-looking future forms like powiem/powiesz/powie/etc.),
+    "past_m": [...] (past tense masculine forms: mówiłem/mówiłeś/mówił/mówiliśmy/mówiliście/mówili),
+    "past_f": [...] (past tense feminine forms: mówiłam/mówiłaś/mówiła/mówiłyśmy/mówiłyście/mówiły),
+    "conditional": [...] (mówiłbym/mówiłbyś/mówiłby/mówilibyśmy/mówilibyście/mówiliby),
+    "imperative": [null, "ty form!", null, "my form!", "wy form!", null]
+  },
+  "examples": {
+    "present":     "one short natural sentence using present tense (1st or 3rd person) — or null if tense not applicable",
+    "future":      "one short natural sentence using future tense",
+    "past_m":      "one short natural sentence using masculine past tense (1st person: Wczoraj mówiłem...)",
+    "past_f":      "one short natural sentence using feminine past tense (1st person: Wczoraj mówiłam...)",
+    "conditional": "one short natural sentence using conditional",
+    "imperative":  "one short natural sentence using imperative (ty form) — or null if no imperative"
+  },
+  "pair": {
+    "infinitive": "...",
+    "aspect": "...",
+    "tenses": {
+      "present": [...] or null,
+      "future": [...],
+      "past_m": [...],
+      "past_f": [...],
+      "conditional": [...],
+      "imperative": [null, "...", null, "...", "...", null]
+    },
+    "examples": {
+      "present":     "..." or null,
+      "future":      "...",
+      "past_m":      "...",
+      "past_f":      "...",
+      "conditional": "...",
+      "imperative":  "..." or null
+    }
+  } or null if no aspect pair exists,
+  "governs": ["case description — e.g. Takes Accusative: mówić co? — Mówię prawdę", "..."] (1–3 items),
+  "note": "One key usage note for B1 learners."
+}`;
+}
+
+function buildVerbTable(infinitive, aspect, tenses, examples) {
+  const isImpf = aspect === 'imperfective';
+  const rows = [];
+
+  if (isImpf && tenses.present) {
+    rows.push({ key: 'present', label: 'Present<br><span style="font-weight:400;font-size:0.74rem;">Teraźniejszy</span>', forms: tenses.present });
+  }
+  if (tenses.future) {
+    const label = isImpf
+      ? 'Future (impf.)<br><span style="font-weight:400;font-size:0.74rem;">Przyszły niedok.</span>'
+      : 'Future<br><span style="font-weight:400;font-size:0.74rem;">Przyszły (dok.)</span>';
+    rows.push({ key: 'future', label, forms: tenses.future });
+  }
+  if (tenses.past_m) {
+    rows.push({ key: 'past_m', label: 'Past — masc.<br><span style="font-weight:400;font-size:0.74rem;">Przeszły m.</span>', forms: tenses.past_m });
+  }
+  if (tenses.past_f) {
+    rows.push({ key: 'past_f', label: 'Past — fem.<br><span style="font-weight:400;font-size:0.74rem;">Przeszły f.</span>', forms: tenses.past_f });
+  }
+  if (tenses.conditional) {
+    rows.push({ key: 'conditional', label: 'Conditional<br><span style="font-weight:400;font-size:0.74rem;">Tryb Warunkowy</span>', forms: tenses.conditional });
+  }
+  if (tenses.imperative) {
+    rows.push({ key: 'imperative', label: 'Imperative<br><span style="font-weight:400;font-size:0.74rem;">Tryb Rozkazujący</span>', forms: tenses.imperative });
+  }
+
+  const headerCells = PRONOUNS.map(p => `<th>${esc(p)}</th>`).join('');
+  const bodyRows = rows.map(r => {
+    const ex = examples && examples[r.key];
+    const exHtml = ex ? `<br><em style="font-weight:400;font-size:0.76rem;color:var(--text-muted);font-style:italic;">${esc(ex)}</em>` : '';
+    const cells = r.forms.map(f =>
+      f === null ? `<td class="na">—</td>` : `<td><strong>${esc(f)}</strong></td>`
+    ).join('');
+    return `<tr><td class="row-label">${r.label}${exHtml}</td>${cells}</tr>`;
+  }).join('');
+
+  return `<table class="gt-table" role="grid" aria-label="Conjugation of ${esc(infinitive)}">
+    <thead><tr><th class="row-head">${esc(infinitive)}</th>${headerCells}</tr></thead>
+    <tbody>${bodyRows}</tbody>
+  </table>`;
+}
+
+function renderVerbResult(data) {
+  const panel = document.getElementById('verb-result');
+  const isImpf = data.aspect === 'imperfective';
+  const badgeCls = isImpf ? 'rbadge-impf' : 'rbadge-perf';
+  const badgeLabel = isImpf ? 'Imperfective (niedokonany)' : 'Perfective (dokonany)';
+  const pairLabel = data.aspectPair
+    ? `<span class="rbadge ${isImpf ? 'rbadge-perf' : 'rbadge-impf'}">Pair: ${esc(data.aspectPair)}</span>`
+    : '';
+
+  // Cases list
+  const caseItems = (data.governs || []).map(g => `<li>${esc(g)}</li>`).join('');
+  const casesHtml = caseItems
+    ? `<div style="margin-top:16px;"><strong style="font-size:0.85rem;color:var(--text-muted);">Cases this verb governs:</strong><ul class="governs-list">${caseItems}</ul></div>`
+    : '';
+
+  // Note
+  const noteHtml = data.note
+    ? `<div class="note-box"><strong>💡 Note:</strong> ${esc(data.note)}</div>`
+    : '';
+
+  // Main verb table
+  const mainTable = buildVerbTable(data.infinitive, data.aspect, data.tenses, data.examples);
+
+  // Aspect pair section
+  let pairHtml = '';
+  if (data.pair) {
+    const pairIsImpf = data.pair.aspect === 'imperfective';
+    const pairBadge = pairIsImpf ? 'rbadge-impf' : 'rbadge-perf';
+    const pairBadgeLabel = pairIsImpf ? 'Imperfective (niedokonany)' : 'Perfective (dokonany)';
+    const pairTable = buildVerbTable(data.pair.infinitive, data.pair.aspect, data.pair.tenses, data.pair.examples);
+    pairHtml = `<details class="pair-details" style="margin-top:20px;">
+      <summary>📖 Show aspect pair conjugation — <strong>${esc(data.pair.infinitive)}</strong> (${pairBadgeLabel})</summary>
+      <div class="pair-body">
+        <div class="result-meta" style="margin-bottom:14px;">
+          <span class="rbadge ${pairBadge}">${pairBadgeLabel}</span>
+        </div>
+        ${pairTable}
+      </div>
+    </details>`;
+  }
+
+  panel.style.display = 'block';
+  panel.innerHTML = `<div class="card" style="border-top:4px solid #7C3AED;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+      <h3 class="result-verb-title" style="margin:0;font-size:1.1rem;">${esc(data.infinitive)}</h3>
+      <div class="result-meta" style="margin:0;">
+        <span class="rbadge ${badgeCls}">${badgeLabel}</span>
+        ${pairLabel}
+      </div>
+    </div>
+    <div style="overflow-x:auto;">${mainTable}</div>
+    ${casesHtml}
+    ${noteHtml}
+    ${pairHtml}
+  </div>`;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ═══════════════════════════════════════════════════════
+// RICH ERROR WITH SUGGESTIONS
+// ═══════════════════════════════════════════════════════
+function renderRichError(panelId, errData) {
+  const el = document.getElementById(panelId);
+  el.style.display = 'block';
+
+  const isVerbPanel = panelId === 'verb-result';
+  const inputId = isVerbPanel ? 'verb-input' : 'gender-input';
+
+  const icon = {
+    conjugated_verb: '🔄', declined_noun: '🔄',
+    noun: '📦', verb: '🔵',
+    adjective: '📐', english: '🌍', unknown: '❓'
+  }[errData.wordType] || '⚠️';
+
+  const suggestions = errData.suggestions || [];
+  const chipsHtml = suggestions.length
+    ? `<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;">
+        <span style="font-size:0.82rem;color:var(--text-muted);">Did you mean:</span>
+        ${suggestions.map(s => `<button class="suggestion-chip" data-target="${inputId}" data-word="${esc(s)}">${esc(s)} →</button>`).join('')}
+      </div>`
+    : '';
+
+  let redirectHtml = '';
+  if (errData.wordType === 'noun' && isVerbPanel) {
+    redirectHtml = `<p style="margin:10px 0 0;font-size:0.84rem;color:var(--text-muted);">💡 Looking for noun declension? <a href="#gender-heading" class="redirect-to-noun" style="color:var(--clr-secondary);font-weight:600;">Try it in the noun section below →</a></p>`;
+  } else if (errData.wordType === 'verb' && !isVerbPanel) {
+    redirectHtml = `<p style="margin:10px 0 0;font-size:0.84rem;color:var(--text-muted);">💡 Looking for verb conjugation? <a href="#verb-heading" class="redirect-to-verb" style="color:var(--clr-secondary);font-weight:600;">Try it in the verb section above →</a></p>`;
+  }
+
+  el.innerHTML = `<div style="padding:16px 18px;background:var(--bg-page);border:1px solid #D9770644;border-left:4px solid #D97706;border-radius:10px;color:var(--text);">
+    <p style="margin:0;font-size:0.95rem;">${icon} ${esc(errData.message)}</p>
+    ${chipsHtml}
+    ${redirectHtml}
+  </div>`;
+
+  // Wire up suggestion chips — click fills the input and auto-runs the lookup
+  el.querySelectorAll('.suggestion-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.target).value = btn.dataset.word;
+      document.getElementById(btn.dataset.target).focus();
+      if (btn.dataset.target === 'verb-input') handleVerbLookup();
+      else handleGenderLookup();
+    });
+  });
+
+  // Cross-section redirect links
+  const toNoun = el.querySelector('.redirect-to-noun');
+  if (toNoun) {
+    toNoun.addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('gender-input').value = document.getElementById('verb-input').value;
+      document.getElementById('gender-heading').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(handleGenderLookup, 350);
+    });
+  }
+  const toVerb = el.querySelector('.redirect-to-verb');
+  if (toVerb) {
+    toVerb.addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('verb-input').value = document.getElementById('gender-input').value;
+      document.getElementById('verb-heading').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(handleVerbLookup, 350);
+    });
+  }
+
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function handleVerbLookup() {
+  const val = document.getElementById('verb-input').value.trim();
+  if (!val) { showError('verb-result', 'Please type a Polish verb first.', 'warn'); return; }
+
+  const btn = document.getElementById('verb-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Looking up…';
+  showLoading('verb-result', val);
+
+  try {
+    const data = await callGroq(buildVerbPrompt(val), 4096);
+    if (data.error) {
+      renderRichError('verb-result', data);
+    } else {
+      renderVerbResult(data);
+    }
+  } catch(err) {
+    handleApiError('verb-result', err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔍 Conjugate';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// WORD GENDER & DECLENSION
+// ═══════════════════════════════════════════════════════
+function buildGenderPrompt(w) {
+  return `You are a Polish grammar reference tool. The user entered: "${w}"
+Respond ONLY with valid JSON — no markdown, no code block, no extra text before or after.
+
+Decide which case applies:
+
+══ CASE 1 — "${w}" is a Polish ADJECTIVE in its nominative masculine singular form (e.g. dobry, nowy, odważny, piękny, duży, mały):
+Respond with ONLY:
+{
+  "wordType": "adjective",
+  "word": "...",
+  "translation": "English translation",
+  "forms": {
+    "nominative":   ["masc sg", "fem sg", "neut sg", "virile pl", "non-virile pl"],
+    "genitive":     ["...", "...", "...", "...", "..."],
+    "dative":       ["...", "...", "...", "...", "..."],
+    "accusative":   ["masc-anim/masc-inan", "fem sg", "neut sg", "virile pl", "non-virile pl"],
+    "instrumental": ["...", "...", "...", "...", "..."],
+    "locative":     ["...", "...", "...", "...", "..."],
+    "vocative":     ["...", "...", "...", "...", "..."]
+  },
+  "examples": {
+    "nominative":   "one short natural sentence using this adjective in nominative",
+    "genitive":     "...",
+    "dative":       "...",
+    "accusative":   "...",
+    "instrumental": "...",
+    "locative":     "...",
+    "vocative":     "..."
+  },
+  "note": "One key usage note — e.g. animacy split in accusative masculine"
+}
+(virile pl = masculine-personal plural; non-virile pl = all others)
+(For accusative masculine singular write both forms separated by / if they differ, e.g. "odważnego/odważny")
+
+══ CASE 2 — "${w}" is a Polish NOUN in its nominative singular form:
+Respond with ONLY:
+{
+  "wordType": "noun",
+  "word": "...",
+  "gender": "masculine animate" or "masculine inanimate" or "feminine" or "neuter",
+  "translation": "English translation",
+  "declension": {
+    "nominative":   ["singular", "plural"],
+    "genitive":     ["...", "..."],
+    "dative":       ["...", "..."],
+    "accusative":   ["...", "..."],
+    "instrumental": ["...", "..."],
+    "locative":     ["...", "..."],
+    "vocative":     ["...", "..."]
+  },
+  "adjectiveTip": "Show how adjective dobry/dobra/dobre agrees with this noun in nominative, genitive, accusative, instrumental.",
+  "pattern": "Declension pattern name — e.g. masculine animate o-stem",
+  "examples": {
+    "nominative":   ["One sentence sg.", "One sentence pl."],
+    "genitive":     ["...", "..."],
+    "dative":       ["...", "..."],
+    "accusative":   ["...", "..."],
+    "instrumental": ["...", "..."],
+    "locative":     ["...", "..."],
+    "vocative":     ["...", "..."]
+  }
+}
+
+══ CASE 3 — Everything else (verb, already-declined form, English word):
+Respond with ONLY:
+{"error":true,"wordType":"TYPE","message":"one short sentence","suggestions":["up to 3 Polish nouns or adjectives"]}
+TYPE: "declined_noun" | "declined_adj" | "verb" | "english" | "unknown"
+Examples:
+- "koty" → {"error":true,"wordType":"declined_noun","message":"koty is the plural of kot — enter the nominative singular","suggestions":["kot"]}
+- "dobrego" → {"error":true,"wordType":"declined_adj","message":"dobrego is the genitive form — enter the nominative: dobry","suggestions":["dobry"]}
+- "mówić" → {"error":true,"wordType":"verb","message":"mówić is a verb — try the verb conjugator above","suggestions":[]}
+- "cat" → {"error":true,"wordType":"english","message":"cat is English — the Polish word is kot","suggestions":["kot"]}
+`;
+}
+
+const CASE_LABELS = [
+  { key: 'nominative',   pl: 'Mianownik',   q: 'Kto? Co?' },
+  { key: 'genitive',     pl: 'Dopełniacz',  q: 'Kogo? Czego?' },
+  { key: 'dative',       pl: 'Celownik',    q: 'Komu? Czemu?' },
+  { key: 'accusative',   pl: 'Biernik',     q: 'Kogo? Co?' },
+  { key: 'instrumental', pl: 'Narzędnik',   q: 'Kim? Czym?' },
+  { key: 'locative',     pl: 'Miejscownik', q: 'O kim? O czym?' },
+  { key: 'vocative',     pl: 'Wołacz',      q: 'Hej!' }
+];
+
+const ADJ_COLS = [
+  { label: 'Masc sg' },
+  { label: 'Fem sg' },
+  { label: 'Neut sg' },
+  { label: 'Pl virile<br><span style="font-weight:400;font-size:0.74rem;">(m-pers.)</span>' },
+  { label: 'Pl non-virile<br><span style="font-weight:400;font-size:0.74rem;">(all others)</span>' }
+];
+
+function renderAdjectiveResult(data) {
+  const panel = document.getElementById('gender-result');
+
+  const headerCells = ADJ_COLS.map(c => `<th>${c.label}</th>`).join('');
+  const bodyRows = CASE_LABELS.map(c => {
+    const forms = (data.forms && data.forms[c.key]) || ['—','—','—','—','—'];
+    const cells = forms.map(f => `<td><strong>${esc(f)}</strong></td>`).join('');
+    const ex = data.examples && data.examples[c.key];
+    const exHtml = ex ? `<br><em style="font-weight:400;font-size:0.76rem;color:var(--text-muted);">${esc(ex)}</em>` : '';
+    return `<tr>
+      <td class="row-label">${esc(c.pl)}<br><span style="font-weight:400;font-size:0.74rem;color:var(--text-muted);">${esc(c.q)}</span>${exHtml}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  const noteHtml = data.note
+    ? `<div class="note-box"><strong>💡 Note:</strong> ${esc(data.note)}</div>`
+    : '';
+
+  panel.style.display = 'block';
+  panel.innerHTML = `<div class="card" style="border-top:4px solid #0D9488;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+      <div>
+        <h3 class="result-gender-title" style="margin:0;font-size:1.1rem;">${esc(data.word)}</h3>
+        ${data.translation ? `<p style="margin:3px 0 0;font-size:0.84rem;color:var(--text-muted);">${esc(data.translation)}</p>` : ''}
+      </div>
+      <span class="rbadge" style="background:#6D28D9;">Adjective</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="gt-table" role="grid" aria-label="Declension of adjective ${esc(data.word)}">
+        <thead><tr><th class="row-head">Case</th>${headerCells}</tr></thead>
+        <tbody>${bodyRows}</tbody>
+      </table>
+    </div>
+    ${noteHtml}
+  </div>`;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function renderGenderResult(data) {
+  const panel = document.getElementById('gender-result');
+  const gmap = {
+    'masculine animate':  { cls: 'rbadge-masc-anim', label: 'Masculine Animate' },
+    'masculine inanimate':{ cls: 'rbadge-masc-inan', label: 'Masculine Inanimate' },
+    'feminine':           { cls: 'rbadge-fem',        label: 'Feminine' },
+    'neuter':             { cls: 'rbadge-neut',       label: 'Neuter' }
+  };
+  const g = gmap[data.gender] || { cls: 'rbadge-masc-inan', label: esc(data.gender) };
+
+  const bodyRows = CASE_LABELS.map(c => {
+    const forms = data.declension[c.key] || ['—', '—'];
+    const exs = data.examples && data.examples[c.key];
+    const exHtml = exs
+      ? `<td style="font-size:0.82rem;font-style:italic;color:var(--text-muted);min-width:160px;">
+          ${esc(exs[0])}<br>
+          <span style="opacity:0.75;">${esc(exs[1])}</span>
+        </td>`
+      : `<td class="na">—</td>`;
+    return `<tr>
+      <td class="row-label">${esc(c.pl)}<br><span style="font-weight:400;font-size:0.74rem;color:var(--text-muted);">${esc(c.q)}</span></td>
+      <td><strong>${esc(forms[0])}</strong></td>
+      <td><strong>${esc(forms[1])}</strong></td>
+      ${exHtml}
+    </tr>`;
+  }).join('');
+
+  const adjHtml = data.adjectiveTip
+    ? `<div class="adj-tip"><strong style="color:#0D9488;">📐 Adjective agreement:</strong> ${esc(data.adjectiveTip)}</div>`
+    : '';
+  const patternHtml = data.pattern
+    ? `<p style="margin-top:10px;font-size:0.82rem;color:var(--text-muted);">Declension pattern: <strong>${esc(data.pattern)}</strong></p>`
+    : '';
+
+  panel.style.display = 'block';
+  panel.innerHTML = `<div class="card" style="border-top:4px solid #0D9488;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+      <div>
+        <h3 class="result-gender-title" style="margin:0;font-size:1.1rem;">${esc(data.word)}</h3>
+        ${data.translation ? `<p style="margin:3px 0 0;font-size:0.84rem;color:var(--text-muted);">${esc(data.translation)}</p>` : ''}
+      </div>
+      <span class="rbadge ${g.cls}">${g.label}</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="gt-table" role="grid" aria-label="Declension of ${esc(data.word)}">
+        <thead>
+          <tr>
+            <th class="row-head">Case</th>
+            <th>Singular</th>
+            <th>Plural</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>${bodyRows}</tbody>
+      </table>
+    </div>
+    ${adjHtml}
+    ${patternHtml}
+  </div>`;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function handleGenderLookup() {
+  const val = document.getElementById('gender-input').value.trim();
+  if (!val) { showError('gender-result', 'Please type a Polish noun or adjective first.', 'warn'); return; }
+
+  const btn = document.getElementById('gender-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Looking up…';
+  showLoading('gender-result', val);
+
+  try {
+    const data = await callGroq(buildGenderPrompt(val), 2048);
+    if (data.error) {
+      renderRichError('gender-result', data);
+    } else if (data.wordType === 'adjective') {
+      renderAdjectiveResult(data);
+    } else {
+      renderGenderResult(data);
+    }
+  } catch(err) {
+    handleApiError('gender-result', err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔍 Look up';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('verb-btn').addEventListener('click', handleVerbLookup);
+  document.getElementById('gender-btn').addEventListener('click', handleGenderLookup);
+
+  document.getElementById('verb-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); handleVerbLookup(); }
+  });
+  document.getElementById('gender-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); handleGenderLookup(); }
+  });
+
+  // Pre-fill from URL params: ?verb=mówić or ?noun=kot
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('verb')) {
+    document.getElementById('verb-input').value = params.get('verb');
+    handleVerbLookup();
+  }
+  if (params.get('noun')) {
+    document.getElementById('gender-input').value = params.get('noun');
+    handleGenderLookup();
+  }
+});
+</script>
+
+<button id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Wróć na górę" title="Wróć na górę">↑</button>
+</body>
+</html>

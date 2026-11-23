@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Mock Exam — Polish B1 Exam Prep</title>
+  <link rel="canonical" href="https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/mock-exam.html">
+  <link rel="stylesheet" href="../css/style.css">
+  <meta name="description" content="Full Polish B1 mock exam: 50 questions across Listening, Reading and Grammar with auto-scoring, plus Writing and Speaking prompts. 51% pass threshold per subtest.">
+  <meta name="keywords" content="Polish B1 mock exam, Polish language test, egzamin B1 polski, Polish grammar test">
+  <meta name="author" content="Ahmed Samy Bakry Mahmoud">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="B1 Mock Exam — Polish B1 Exam Prep">
+  <meta property="og:description" content="Full Polish B1 mock exam with 50 questions, auto-scoring and 51% pass threshold.">
+  <meta property="og:image" content="https://polish-b1-exam-guide-assets.s3.amazonaws.com/assets/Ahmed%20Samy%20Bakry%20Mahmoud.jpg">
+  <meta property="og:url" content="https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/mock-exam.html">
+  <style>
+    /* ═══ EXAM SCREENS ═══ */
+    .exam-screen { display: none; }
+    .exam-screen.active { display: block; }
+
+    /* ═══ STICKY TOPBAR ═══ */
+    #exam-topbar {
+      display: none;
+      position: sticky; top: 0; z-index: 90;
+      background: var(--bg-card); border-bottom: 2px solid var(--border);
+      padding: 10px 20px; align-items: center;
+      justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    }
+    #exam-topbar.visible { display: flex; }
+    .exam-steps { display: flex; gap: 6px; flex-wrap: wrap; }
+    .exam-step {
+      padding: 4px 11px; border-radius: 20px; font-size: 0.74rem;
+      font-weight: 600; background: var(--bg); color: var(--text-muted);
+      border: 1px solid var(--border); white-space: nowrap;
+    }
+    .exam-step.active  { background: var(--clr-primary-bg); color: #fff; border-color: var(--clr-primary-bg); }
+    .exam-step.done    { background: #16A34A; color: #fff; border-color: #16A34A; }
+    #timer-display {
+      font-size: 1.1rem; font-weight: 800; font-variant-numeric: tabular-nums;
+      color: var(--clr-primary); min-width: 56px; text-align: right;
+    }
+    #timer-display.twarn  { color: #D97706; }
+    #timer-display.tcrit  { color: #DC2626; animation: tblink 1s step-end infinite; }
+    @keyframes tblink { 50% { opacity: 0.3; } }
+
+    /* ═══ INTRO OVERVIEW CARDS ═══ */
+    .subtest-overview-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px; margin: 24px 0;
+    }
+    .soc {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px; text-align: center;
+    }
+    .soc.auto-scored  { border-top: 3px solid var(--clr-primary-bg); }
+    .soc.self-scored  { border-top: 3px solid var(--clr-accent-orange); }
+    .soc-icon  { font-size: 1.5rem; margin-bottom: 6px; }
+    .soc-name  { font-weight: 700; font-size: 0.88rem; }
+    .soc-qs    { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* ═══ SECTION HEADER BAND ═══ */
+    .shb {
+      background: linear-gradient(135deg,#1E3A5F 0%,#0C2340 100%);
+      color:#fff; padding:18px 22px; border-radius:10px;
+      margin-bottom:22px; display:flex; align-items:center;
+      justify-content:space-between; gap:14px; flex-wrap:wrap;
+    }
+    [data-theme="dark"] .shb,
+    @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .shb{background:linear-gradient(135deg,#0D1A2E 0%,#060E1C 100%)}}
+    .shb h2  { color:#fff; margin:0 0 4px; font-size:1.25rem; }
+    .shb p   { color:rgba(255,255,255,0.72); margin:0; font-size:0.86rem; }
+    .shb-badge {
+      background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+      color:#fff; padding:5px 13px; border-radius:20px; font-size:0.78rem; font-weight:600;
+    }
+
+    /* ═══ TEXT / TRANSCRIPT BOX ═══ */
+    .text-box {
+      background:var(--bg); border:1px solid var(--border);
+      border-left:4px solid var(--clr-primary); border-radius:8px;
+      padding:18px; margin-bottom:18px;
+      max-height:280px; overflow-y:auto;
+      font-size:0.91rem; line-height:1.72;
+    }
+    .text-box h4 {
+      font-size:0.8rem; font-weight:700; color:var(--clr-primary);
+      text-transform:uppercase; letter-spacing:.06em; margin:0 0 10px;
+    }
+    .text-box p  { margin:0 0 7px; }
+    .spkr        { font-weight:700; color:var(--clr-primary); }
+
+    /* ═══ QUESTIONS ═══ */
+    .qs-block { margin-bottom:28px; }
+    .qs-block h4 {
+      font-size:0.78rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:.08em; color:var(--text-muted); margin:0 0 12px;
+      padding-bottom:7px; border-bottom:1px solid var(--border);
+    }
+    .question {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:8px; padding:15px; margin-bottom:10px;
+    }
+    .q-text  { font-size:0.93rem; font-weight:600; color:var(--text); margin:0 0 10px; }
+    .q-stem  {
+      font-size:1rem; font-weight:700; color:var(--text);
+      background:var(--bg); border:1px solid var(--border);
+      border-radius:6px; padding:9px 13px; margin-bottom:10px; font-style:italic;
+    }
+    .option-group {
+      display:grid; grid-template-columns:1fr 1fr; gap:7px;
+    }
+    @media(max-width:520px){ .option-group{ grid-template-columns:1fr; } }
+    .opt-btn {
+      text-align:left; padding:9px 13px; border-radius:7px;
+      border:1.5px solid var(--border); background:var(--bg);
+      color:var(--text); font-size:0.86rem; cursor:pointer;
+      transition:background .14s, border-color .14s; line-height:1.4;
+    }
+    .opt-btn:hover:not(:disabled) { border-color:var(--clr-primary); }
+    .opt-btn.selected  { background:var(--clr-primary-bg); border-color:var(--clr-primary-bg); color:#fff; font-weight:600; }
+    .opt-btn.opt-correct { background:#dcfce7; border-color:#16A34A; color:#14532D; font-weight:600; }
+    .opt-btn.opt-wrong   { background:#fee2e2; border-color:#DC2626; color:#7F1D1D; }
+    .opt-btn:disabled    { cursor:default; }
+    @media(prefers-color-scheme:dark){
+      :root:not([data-theme="light"]) .opt-btn.opt-correct { background:rgba(22,163,74,.18); color:#86efac; border-color:#16A34A; }
+      :root:not([data-theme="light"]) .opt-btn.opt-wrong   { background:rgba(220,38,38,.18);  color:#fca5a5; border-color:#DC2626; }
+    }
+    :root[data-theme="dark"] .opt-btn.opt-correct { background:rgba(22,163,74,.18); color:#86efac; border-color:#16A34A; }
+    :root[data-theme="dark"] .opt-btn.opt-wrong   { background:rgba(220,38,38,.18);  color:#fca5a5; border-color:#DC2626; }
+
+    /* Grammar 2-col */
+    .grammar-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:720px){ .grammar-grid{ grid-template-columns:1fr; } }
+
+    /* ═══ SECTION ACTION BAR ═══ */
+    .sec-actions {
+      display:flex; align-items:center; justify-content:flex-end;
+      gap:12px; padding:18px 0 32px; border-top:1px solid var(--border); margin-top:16px;
+    }
+    .unanswered-warn { font-size:.83rem; color:#D97706; font-weight:600; margin-right:auto; }
+    .btn-submit-sec, .btn-next-sec {
+      padding:11px 26px; border-radius:8px; font-size:.93rem; font-weight:700;
+      cursor:pointer; border:none; color:#fff;
+    }
+    .btn-submit-sec { background:var(--clr-primary-bg); }
+    .btn-submit-sec:hover { opacity:.88; }
+    .btn-next-sec { background:#16A34A; display:none; }
+    .btn-next-sec:hover { opacity:.88; }
+
+    /* ═══ WRITING / SPEAKING ═══ */
+    .prompt-box {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-left:4px solid var(--clr-accent-orange); border-radius:8px;
+      padding:18px; margin-bottom:18px;
+    }
+    .prompt-box h4 { color:var(--clr-accent-orange); margin:0 0 9px; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; }
+    .rubric-list { display:grid; gap:9px; margin-bottom:22px; }
+    .rubric-item {
+      display:flex; align-items:center; gap:10px;
+      padding:11px 15px; background:var(--bg-card);
+      border:1px solid var(--border); border-radius:7px;
+    }
+    .rubric-item input[type="checkbox"] { width:17px; height:17px; cursor:pointer; flex-shrink:0; accent-color:#16A34A; }
+    .rubric-item label { font-size:.88rem; cursor:pointer; color:var(--text); }
+
+    /* ═══ RESULTS ═══ */
+    .results-banner {
+      text-align:center; padding:30px 20px; border-radius:12px; margin-bottom:26px;
+    }
+    .results-banner.pass-banner { background:linear-gradient(135deg,#16A34A,#15803D); color:#fff; }
+    .results-banner.study-banner { background:linear-gradient(135deg,#2563EB,#1D4ED8); color:#fff; }
+    .results-banner h2 { color:inherit; font-size:1.7rem; margin:0 0 6px; }
+    .results-banner p  { color:rgba(255,255,255,.82); margin:0; }
+    .results-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+      gap:13px; margin-bottom:22px;
+    }
+    .result-card {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:10px; padding:18px; text-align:center;
+    }
+    .result-card.pass { border-top:4px solid #16A34A; }
+    .result-card.fail { border-top:4px solid #DC2626; }
+    .rc-icon  { font-size:1.3rem; margin-bottom:5px; }
+    .rc-name  { font-weight:700; font-size:.87rem; color:var(--text); margin-bottom:7px; }
+    .rc-score { font-size:1.45rem; font-weight:800; color:var(--text); line-height:1; }
+    .rc-pct   { font-size:.82rem; color:var(--text-muted); margin:3px 0 8px; }
+    .rc-verdict { font-size:.76rem; font-weight:700; padding:3px 11px; border-radius:20px; display:inline-block; }
+    .pass .rc-verdict { background:#dcfce7; color:#14532D; }
+    .fail .rc-verdict { background:#fee2e2; color:#7F1D1D; }
+    @media(prefers-color-scheme:dark){
+      :root:not([data-theme="light"]) .pass .rc-verdict { background:rgba(22,163,74,.2); color:#86efac; }
+      :root:not([data-theme="light"]) .fail .rc-verdict { background:rgba(220,38,38,.2); color:#fca5a5; }
+    }
+    :root[data-theme="dark"] .pass .rc-verdict { background:rgba(22,163,74,.2); color:#86efac; }
+    :root[data-theme="dark"] .fail .rc-verdict { background:rgba(220,38,38,.2); color:#fca5a5; }
+    .rc-self { font-size:.72rem; color:var(--text-muted); margin-top:4px; }
+
+    .btn-retake {
+      display:block; width:fit-content; margin:0 auto;
+      background:var(--clr-primary-bg); color:#fff; border:none;
+      padding:13px 32px; border-radius:8px; font-size:.95rem; font-weight:700;
+      cursor:pointer; text-decoration:none;
+    }
+    .btn-retake:hover { opacity:.88; }
+
+    /* ═══ PRACTICE MODE BUTTONS ═══ */
+    .practice-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; }
+    .btn-practice {
+      padding: 9px 18px; border-radius: 8px; border: 1.5px solid var(--border);
+      background: var(--bg-card); color: var(--text); font-size: 0.86rem; font-weight: 600;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+    .btn-practice:hover { border-color: var(--clr-primary-bg); background: var(--clr-primary-bg); color: #fff; }
+    .practice-divider {
+      display: flex; align-items: center; gap: 12px; margin: 20px 0 10px;
+      color: var(--text-muted); font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em;
+    }
+    .practice-divider::before, .practice-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ═══ START BUTTON ═══ */
+    .btn-start-exam {
+      display:inline-block;
+      background:linear-gradient(135deg,var(--clr-primary-bg),var(--clr-secondary-bg));
+      color:#fff; padding:15px 38px; border-radius:10px; font-size:1.08rem;
+      font-weight:700; cursor:pointer; border:none; margin-top:22px;
+      box-shadow:0 4px 14px rgba(29,78,216,.28);
+      transition:transform .15s,box-shadow .15s;
+    }
+    .btn-start-exam:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(29,78,216,.38); }
+
+    /* ═══ HISTORY TABLE ═══ */
+    .history-wrap { margin-bottom: 24px; }
+    .history-wrap h3 { font-size: .95rem; font-weight: 700; margin: 0 0 10px; }
+    .history-scroll { overflow-x: auto; }
+    .history-tbl { width: 100%; border-collapse: collapse; font-size: .8rem; }
+    .history-tbl th { background: var(--bg); padding: 7px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border); white-space: nowrap; }
+    .history-tbl td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: center; white-space: nowrap; }
+    .history-tbl td:first-child { text-align: left; }
+    .history-tbl tr:hover td { background: var(--bg); }
+    .hist-pass { color: #16A34A; font-weight: 600; }
+    .hist-fail { color: #DC2626; font-weight: 600; }
+    .btn-clear-hist { font-size: .76rem; color: var(--text-muted); background: none; border: none; cursor: pointer; text-decoration: underline; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ NAVIGATION ══════════ -->
+<nav class="navbar" role="navigation">
+  <a class="navbar-brand" href="../index.html">
+    <div class="brand-flag"><div class="flag-white"></div><div class="flag-red"></div></div>
+    Polish B1
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="../index.html">🏠 Overview</a>
+    <a class="nav-link" href="listening.html">🎧 Listening</a>
+    <a class="nav-link" href="reading.html">📖 Reading</a>
+    <div class="nav-grammar-group"><a class="nav-link" href="grammar-overview.html">📚 Grammar</a><button class="nav-grammar-arrow" onclick="toggleGrammarMenu(event)" aria-label="Grammar sub-pages"></button><div class="nav-grammar-dropdown" id="nav-grammar-dropdown"><a href="grammar-overview.html">📚 Przegląd (Overview)</a><a href="grammar-instrumental.html">① Narzędnik — Instrumental</a><a href="grammar-genitive.html">② Dopełniacz — Genitive</a><a href="grammar-aspects.html">③ Aspekty — Verb Aspects</a><a href="grammar-dative.html">④ Celownik — Dative</a><a href="grammar-locative.html">⑤ Miejscownik — Locative</a><a href="grammar-motion.html">⑥ Ruchu — Motion</a></div></div>
+    <a class="nav-link" href="writing.html">✍️ Writing</a>
+    <a class="nav-link" href="speaking.html">🗣️ Speaking</a>
+    <a class="nav-link" href="vocabulary.html">📝 Vocabulary</a>
+    <a class="nav-link" href="study-plan.html">📅 Study Plan</a>
+    <a class="nav-link" href="exam-info.html">🎓 Take the Exam</a>
+    <a class="nav-link" href="mock-exam.html">🎯 Mock Exam</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-theme" id="btn-theme" aria-label="Toggle theme">🌙</button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="../index.html">🏠 Overview</a>
+  <div class="mobile-section-label">Exam Subtests</div>
+  <a href="listening.html">🎧 Listening</a>
+  <a href="reading.html">📖 Reading</a>
+  <a href="grammar-overview.html">📚 Grammar</a>
+  <a href="writing.html">✍️ Writing</a>
+  <a href="speaking.html">🗣️ Speaking</a>
+  <div class="mobile-section-label">Resources</div>
+  <a href="vocabulary.html">📝 Vocabulary</a>
+  <a href="study-plan.html">📅 Study Plan</a>
+  <a href="exam-info.html">🎓 Take the Exam</a>
+  <a href="mock-exam.html">🎯 Mock Exam</a>
+</div>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="page-wrapper">
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="../index.html">🏠 Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Mock Exam</span>
+  </nav>
+
+  <!-- ─── STICKY EXAM TOPBAR ─── -->
+  <div id="exam-topbar">
+    <div class="exam-steps">
+      <div class="exam-step" id="step-1">🎧 Listening</div>
+      <div class="exam-step" id="step-2">📖 Reading</div>
+      <div class="exam-step" id="step-3">📚 Grammar</div>
+      <div class="exam-step" id="step-4">✍️ Writing</div>
+      <div class="exam-step" id="step-5">🗣️ Speaking</div>
+    </div>
+    <div id="timer-display">25:00</div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 0 — INTRO
+       ══════════════════════════════════════ -->
+  <section id="screen-intro" class="exam-screen active">
+
+    <div class="page-header">
+      <h1>🎯 Polish B1 Mock Exam</h1>
+      <p>Simulate the real exam experience: 5 subtests, automatic scoring for objective sections, and self-assessment for Writing and Speaking. Each subtest requires 51% to pass.</p>
+      <div class="header-meta">
+        <span class="header-badge">100 Questions</span>
+        <span class="header-badge">5 Subtests</span>
+        <span class="header-badge">51% Pass Threshold</span>
+        <span class="header-badge">~125 min</span>
+      </div>
+    </div>
+
+    <div class="rule-badge">⚠️ This is a timed practice exam matching the real exam scale: 40 min listening · 40 min reading · 45 min grammar. When time expires, answers are submitted automatically. Work through each section as you would on exam day.</div>
+
+    <h2 class="section-title">What to Expect</h2>
+    <div class="subtest-overview-row">
+      <div class="soc auto-scored"><div class="soc-icon">🎧</div><div class="soc-name">Listening</div><div class="soc-qs">30 questions · 40 min · Auto-scored</div></div>
+      <div class="soc auto-scored"><div class="soc-icon">📖</div><div class="soc-name">Reading</div><div class="soc-qs">30 questions · 40 min · Auto-scored</div></div>
+      <div class="soc auto-scored"><div class="soc-icon">📚</div><div class="soc-name">Grammar</div><div class="soc-qs">40 questions · 45 min · Auto-scored</div></div>
+      <div class="soc self-scored"><div class="soc-icon">✍️</div><div class="soc-name">Writing</div><div class="soc-qs">2 tasks · Self-assessed</div></div>
+      <div class="soc self-scored"><div class="soc-icon">🗣️</div><div class="soc-name">Speaking</div><div class="soc-qs">2 topic cards · Self-assessed</div></div>
+    </div>
+
+    <div style="font-size: 0.8rem; text-align: center; color: var(--text-muted); margin: -8px 0 16px;">
+      Questions are randomly drawn from a bank of 160. You get a fresh set every retake. &nbsp;·&nbsp;
+      <a href="https://certyfikatpolski.pl/o-egzaminie/testy-egzaminacyjne-z-poprzednich-lat/" target="_blank" rel="noopener" style="color: var(--clr-primary);">📋 Download real past papers → certyfikatpolski.pl</a>
+    </div>
+
+    <div class="tip-box">
+      <strong>💡 Before you start:</strong> The Listening section uses written transcripts instead of audio — this tests your Polish reading and comprehension simultaneously. Have paper and pen ready for the Writing section. For Speaking, read the card aloud or explain it in Polish to yourself.
+    </div>
+
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--clr-secondary); border-radius: 10px; padding: 18px 20px; margin-bottom: 24px;">
+      <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--clr-secondary); margin-bottom: 10px;">📋 About this Mock Exam</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+        <div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 3px;">Per session</div>
+          <div style="font-size: 0.9rem; font-weight: 600; color: var(--text);">100 auto-scored questions</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">30 listening + 30 reading + 40 grammar<br>+ 2 writing tasks + 2 speaking topics</div>
+        </div>
+        <div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 3px;">Question bank total</div>
+          <div style="font-size: 0.9rem; font-weight: 600; color: var(--text);">160 questions</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">100 grammar + 60 text comprehension<br>across 12 Polish texts</div>
+        </div>
+        <div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 3px;">Unique variations</div>
+          <div style="font-size: 0.9rem; font-weight: 600; color: var(--text);">Different every retake</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Grammar: 40 drawn from 100<br>Texts: 6 drawn from 6 per type</div>
+        </div>
+        <div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 3px;">Timing (real exam scale)</div>
+          <div style="font-size: 0.9rem; font-weight: 600; color: var(--text);">~125 min auto-scored</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">40 min listening · 40 min reading<br>45 min grammar + self-paced writing/speaking</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="exam-history"></div>
+
+    <div style="text-align:center; padding: 10px 0 16px;">
+      <button class="btn-start-exam" onclick="startExam()">Start Full Exam →</button>
+    </div>
+
+    <div class="practice-divider">or practise a single subtest</div>
+    <div class="practice-row" style="padding-bottom: 40px;">
+      <button class="btn-practice" onclick="startPractice('listening')">🎧 Listening only</button>
+      <button class="btn-practice" onclick="startPractice('reading')">📖 Reading only</button>
+      <button class="btn-practice" onclick="startPractice('grammar')">📚 Grammar only</button>
+      <button class="btn-practice" onclick="startPractice('writing')">✍️ Writing only</button>
+      <button class="btn-practice" onclick="startPractice('speaking')">🗣️ Speaking only</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 1 — LISTENING
+       ══════════════════════════════════════ -->
+  <section id="screen-listening" class="exam-screen">
+    <div class="shb">
+      <div class="shb-left"><h2>🎧 Listening (Rozumienie ze słuchu)</h2><p>Read each transcript, then answer the questions. Choose the best answer for each question.</p></div>
+      <span class="shb-badge">Subtest 1 of 5</span>
+    </div>
+    <div class="tip-box" style="border-left-color: var(--clr-accent-orange); margin-bottom: 20px; font-size: 0.88rem;">
+      <strong>🎧 Want real audio practice?</strong> The official exam site (certyfikatpolski.pl) does not publish audio recordings publicly. Use these free alternatives before your exam:
+      <a href="https://www.gov.pl/attachment/4e055599-1f75-412b-aab0-21a097f6064d" target="_blank" rel="noopener" style="display:inline-block; margin: 6px 8px 0 0; color: var(--clr-primary);">📥 Gov.pl B1 Audio Pack (ZIP)</a>
+      <a href="https://phavi.umcs.pl/at/attachments/2025/0426/132248-nagrania-klasa-ix-lekcje-1-5.zip" target="_blank" rel="noopener" style="display:inline-block; margin: 6px 8px 0 0; color: var(--clr-primary);">📥 UMCS B1 Audio Lekcje 1–5</a>
+      <a href="https://phavi.umcs.pl/at/attachments/2025/0426/132312-nagrania-klasa-ix-lekcje-6-9.zip" target="_blank" rel="noopener" style="display:inline-block; margin: 6px 0 0; color: var(--clr-primary);">📥 UMCS B1 Audio Lekcje 6–9</a>
+    </div>
+
+    <!-- DYNAMIC LISTENING CONTENT START -->
+    <div id="listening-content"></div>
+    <!-- DYNAMIC LISTENING CONTENT END -->
+    <!-- STATIC FALLBACK (hidden when bank loads) -->
+    <div id="listening-static" style="display:none">
+    <!-- Transcript 1 -->
+    <div class="text-box">
+      <h4>Transcript 1 — Rozmowa w kawiarni (Conversation at a café)</h4>
+      <p><span class="spkr">Anna:</span> Cześć, Piotrze! Długo na mnie czekałeś?</p>
+      <p><span class="spkr">Piotr:</span> Nie, przyszedłem pięć minut temu. Co zamawiasz?</p>
+      <p><span class="spkr">Anna:</span> Nie wiem. Mam ochotę na coś ciepłego. Może herbatę?</p>
+      <p><span class="spkr">Piotr:</span> Ja zamówię kawę. Kelner powiedział, że mają dziś specjalną kawę z Brazylii.</p>
+      <p><span class="spkr">Anna:</span> Naprawdę? To ja też wezmę kawę. A zjesz coś?</p>
+      <p><span class="spkr">Piotr:</span> Chętnie zjem ciasto. Widzę, że mają sernik i szarlotkę.</p>
+      <p><span class="spkr">Anna:</span> Ja nie będę jadła słodyczy — muszę uważać na dietę. Wezmę tylko kanapkę.</p>
+      <p><span class="spkr">Piotr:</span> No, do mnie dieta nie przemawia. Wezmę sernik.</p>
+      <p><span class="spkr">Anna:</span> Kelner! Poprosimy dwie kawy i sernik. Dla mnie też kanapkę z serem.</p>
+    </div>
+    <div class="qs-block">
+      <h4>Questions 1–5 — Transcript 1</h4>
+      <div class="question"><p class="q-text">1. How long did Piotr wait for Anna?</p><div class="option-group"><button class="opt-btn" data-q="L1" data-opt="0" onclick="pick('L1',0,this)">A) 15 minutes</button><button class="opt-btn" data-q="L1" data-opt="1" onclick="pick('L1',1,this)">B) 5 minutes</button><button class="opt-btn" data-q="L1" data-opt="2" onclick="pick('L1',2,this)">C) 10 minutes</button><button class="opt-btn" data-q="L1" data-opt="3" onclick="pick('L1',3,this)">D) He didn't say</button></div></div>
+      <div class="question"><p class="q-text">2. What is special about the coffee today?</p><div class="option-group"><button class="opt-btn" data-q="L2" data-opt="0" onclick="pick('L2',0,this)">A) It's very cheap</button><button class="opt-btn" data-q="L2" data-opt="1" onclick="pick('L2',1,this)">B) It comes from Brazil</button><button class="opt-btn" data-q="L2" data-opt="2" onclick="pick('L2',2,this)">C) It's served cold</button><button class="opt-btn" data-q="L2" data-opt="3" onclick="pick('L2',3,this)">D) It's sugar-free</button></div></div>
+      <div class="question"><p class="q-text">3. Why does Anna decide not to eat cake?</p><div class="option-group"><button class="opt-btn" data-q="L3" data-opt="0" onclick="pick('L3',0,this)">A) She doesn't like sweets</button><button class="opt-btn" data-q="L3" data-opt="1" onclick="pick('L3',1,this)">B) She's not hungry</button><button class="opt-btn" data-q="L3" data-opt="2" onclick="pick('L3',2,this)">C) She's watching her diet</button><button class="opt-btn" data-q="L3" data-opt="3" onclick="pick('L3',3,this)">D) The cake is expensive</button></div></div>
+      <div class="question"><p class="q-text">4. What does Piotr order to eat?</p><div class="option-group"><button class="opt-btn" data-q="L4" data-opt="0" onclick="pick('L4',0,this)">A) Szarlotka (apple cake)</button><button class="opt-btn" data-q="L4" data-opt="1" onclick="pick('L4',1,this)">B) Sernik (cheesecake)</button><button class="opt-btn" data-q="L4" data-opt="2" onclick="pick('L4',2,this)">C) Kanapka (sandwich)</button><button class="opt-btn" data-q="L4" data-opt="3" onclick="pick('L4',3,this)">D) Nothing</button></div></div>
+      <div class="question"><p class="q-text">5. What does Anna order at the end?</p><div class="option-group"><button class="opt-btn" data-q="L5" data-opt="0" onclick="pick('L5',0,this)">A) Tea and a sandwich</button><button class="opt-btn" data-q="L5" data-opt="1" onclick="pick('L5',1,this)">B) Coffee and sernik</button><button class="opt-btn" data-q="L5" data-opt="2" onclick="pick('L5',2,this)">C) Coffee and a cheese sandwich</button><button class="opt-btn" data-q="L5" data-opt="3" onclick="pick('L5',3,this)">D) Tea and szarlotka</button></div></div>
+    </div>
+
+    <!-- Transcript 2 -->
+    <div class="text-box">
+      <h4>Transcript 2 — Ogłoszenie radiowe (Radio announcement)</h4>
+      <p>Słuchasz Radia Kraków. Informacja kulturalna.</p>
+      <p>Zapraszamy na Festiwal Muzyczny w Parku Jordana. Festiwal odbędzie się w sobotę, 15 czerwca, od godziny 16:00 do 22:00. Wstęp jest bezpłatny dla wszystkich. W programie znajdują się koncerty muzyki polskiej i zagranicznej. Wystąpią między innymi Warszawski Kwartet Jazzowy oraz młodzi artyści z całej Polski. W razie deszczu festiwal zostanie przeniesiony do Hali Wisła. Więcej informacji na stronie internetowej radia lub pod numerem telefonu 12 345 67 89.</p>
+    </div>
+    <div class="qs-block">
+      <h4>Questions 6–10 — Transcript 2</h4>
+      <div class="question"><p class="q-text">6. When does the festival take place?</p><div class="option-group"><button class="opt-btn" data-q="L6" data-opt="0" onclick="pick('L6',0,this)">A) Friday</button><button class="opt-btn" data-q="L6" data-opt="1" onclick="pick('L6',1,this)">B) Saturday</button><button class="opt-btn" data-q="L6" data-opt="2" onclick="pick('L6',2,this)">C) Sunday</button><button class="opt-btn" data-q="L6" data-opt="3" onclick="pick('L6',3,this)">D) Not mentioned</button></div></div>
+      <div class="question"><p class="q-text">7. What is the admission price?</p><div class="option-group"><button class="opt-btn" data-q="L7" data-opt="0" onclick="pick('L7',0,this)">A) 15 złoty</button><button class="opt-btn" data-q="L7" data-opt="1" onclick="pick('L7',1,this)">B) 20 złoty</button><button class="opt-btn" data-q="L7" data-opt="2" onclick="pick('L7',2,this)">C) Free</button><button class="opt-btn" data-q="L7" data-opt="3" onclick="pick('L7',3,this)">D) Pay what you want</button></div></div>
+      <div class="question"><p class="q-text">8. Where will the festival move in case of rain?</p><div class="option-group"><button class="opt-btn" data-q="L8" data-opt="0" onclick="pick('L8',0,this)">A) To the city hall</button><button class="opt-btn" data-q="L8" data-opt="1" onclick="pick('L8',1,this)">B) To Hala Wisła</button><button class="opt-btn" data-q="L8" data-opt="2" onclick="pick('L8',2,this)">C) It will be cancelled</button><button class="opt-btn" data-q="L8" data-opt="3" onclick="pick('L8',3,this)">D) To the stadium</button></div></div>
+      <div class="question"><p class="q-text">9. What type of music will be performed?</p><div class="option-group"><button class="opt-btn" data-q="L9" data-opt="0" onclick="pick('L9',0,this)">A) Only Polish music</button><button class="opt-btn" data-q="L9" data-opt="1" onclick="pick('L9',1,this)">B) Only jazz</button><button class="opt-btn" data-q="L9" data-opt="2" onclick="pick('L9',2,this)">C) Polish and international</button><button class="opt-btn" data-q="L9" data-opt="3" onclick="pick('L9',3,this)">D) Classical only</button></div></div>
+      <div class="question"><p class="q-text">10. How can you get more information?</p><div class="option-group"><button class="opt-btn" data-q="L10" data-opt="0" onclick="pick('L10',0,this)">A) At the park office</button><button class="opt-btn" data-q="L10" data-opt="1" onclick="pick('L10',1,this)">B) At the city hall</button><button class="opt-btn" data-q="L10" data-opt="2" onclick="pick('L10',2,this)">C) On the radio website or by phone</button><button class="opt-btn" data-q="L10" data-opt="3" onclick="pick('L10',3,this)">D) In the newspaper</button></div></div>
+    </div>
+
+    <!-- Transcript 3 -->
+    <div class="text-box">
+      <h4>Transcript 3 — Rozmowa telefoniczna (Phone conversation)</h4>
+      <p><span class="spkr">Tomasz:</span> Halo?</p>
+      <p><span class="spkr">Marta:</span> Cześć, Tomku. Tu Marta. Planujesz coś na weekend?</p>
+      <p><span class="spkr">Tomasz:</span> Jeszcze nie wiem. A co?</p>
+      <p><span class="spkr">Marta:</span> Chciałam zapytać, czy możemy pójść razem do kina. W sobotę wieczorem.</p>
+      <p><span class="spkr">Tomasz:</span> W sobotę niestety nie mogę — mam urodziny mamy i muszę być w domu.</p>
+      <p><span class="spkr">Marta:</span> Rozumiem. A w niedzielę?</p>
+      <p><span class="spkr">Tomasz:</span> W niedzielę jestem wolny do południa, ale po południu gram w piłkę z kolegami.</p>
+      <p><span class="spkr">Marta:</span> To może pójdziemy w niedzielę rano? O jedenastej zaczyna się nowy film o Warszawie.</p>
+      <p><span class="spkr">Tomasz:</span> Świetnie! Gdzie się spotkamy?</p>
+      <p><span class="spkr">Marta:</span> Przed kinem Kultura, obok dworca.</p>
+      <p><span class="spkr">Tomasz:</span> OK, do zobaczenia w niedzielę o jedenastej.</p>
+    </div>
+    <div class="qs-block">
+      <h4>Questions 11–15 — Transcript 3</h4>
+      <div class="question"><p class="q-text">11. Why can't Tomasz meet on Saturday?</p><div class="option-group"><button class="opt-btn" data-q="L11" data-opt="0" onclick="pick('L11',0,this)">A) He has work</button><button class="opt-btn" data-q="L11" data-opt="1" onclick="pick('L11',1,this)">B) He has his mother's birthday</button><button class="opt-btn" data-q="L11" data-opt="2" onclick="pick('L11',2,this)">C) He's going on a trip</button><button class="opt-btn" data-q="L11" data-opt="3" onclick="pick('L11',3,this)">D) He doesn't feel well</button></div></div>
+      <div class="question"><p class="q-text">12. What is Tomasz doing on Sunday afternoon?</p><div class="option-group"><button class="opt-btn" data-q="L12" data-opt="0" onclick="pick('L12',0,this)">A) Playing tennis</button><button class="opt-btn" data-q="L12" data-opt="1" onclick="pick('L12',1,this)">B) Playing football with friends</button><button class="opt-btn" data-q="L12" data-opt="2" onclick="pick('L12',2,this)">C) Working</button><button class="opt-btn" data-q="L12" data-opt="3" onclick="pick('L12',3,this)">D) Visiting family</button></div></div>
+      <div class="question"><p class="q-text">13. What time does the film start?</p><div class="option-group"><button class="opt-btn" data-q="L13" data-opt="0" onclick="pick('L13',0,this)">A) 10:00</button><button class="opt-btn" data-q="L13" data-opt="1" onclick="pick('L13',1,this)">B) 12:00</button><button class="opt-btn" data-q="L13" data-opt="2" onclick="pick('L13',2,this)">C) 11:00</button><button class="opt-btn" data-q="L13" data-opt="3" onclick="pick('L13',3,this)">D) 11:30</button></div></div>
+      <div class="question"><p class="q-text">14. Where will they meet?</p><div class="option-group"><button class="opt-btn" data-q="L14" data-opt="0" onclick="pick('L14',0,this)">A) At the town square</button><button class="opt-btn" data-q="L14" data-opt="1" onclick="pick('L14',1,this)">B) In front of Kino Kultura</button><button class="opt-btn" data-q="L14" data-opt="2" onclick="pick('L14',2,this)">C) At the train station</button><button class="opt-btn" data-q="L14" data-opt="3" onclick="pick('L14',3,this)">D) At Marta's house</button></div></div>
+      <div class="question"><p class="q-text">15. What is the film about?</p><div class="option-group"><button class="opt-btn" data-q="L15" data-opt="0" onclick="pick('L15',0,this)">A) About Poland</button><button class="opt-btn" data-q="L15" data-opt="1" onclick="pick('L15',1,this)">B) About Warsaw</button><button class="opt-btn" data-q="L15" data-opt="2" onclick="pick('L15',2,this)">C) About music</button><button class="opt-btn" data-q="L15" data-opt="3" onclick="pick('L15',3,this)">D) Not mentioned</button></div></div>
+    </div>
+    </div><!-- end listening-static -->
+
+    <div class="sec-actions">
+      <span class="unanswered-warn" id="warn-listening"></span>
+      <button class="btn-submit-sec" onclick="submitSection('listening')">Submit &amp; Continue →</button>
+      <button class="btn-next-sec" id="next-listening" onclick="goTo('reading',2,40*60)">Next: Reading →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 2 — READING
+       ══════════════════════════════════════ -->
+  <section id="screen-reading" class="exam-screen">
+    <div class="shb">
+      <div class="shb-left"><h2>📖 Reading (Rozumienie tekstów pisanych)</h2><p>Read each text carefully, then choose the best answer for each question.</p></div>
+      <span class="shb-badge">Subtest 2 of 5</span>
+    </div>
+
+    <div id="reading-content"></div>
+    <div id="reading-static" style="display:none">
+    <!-- Text 1 -->
+    <div class="text-box">
+      <h4>Text 1 — Email od znajomej (Email from a friend)</h4>
+      <p><em>Od: anna.kowalska@email.pl | Do: tomek.nowak@email.pl | Temat: Plany na wakacje</em></p>
+      <p>Cześć Tomku! Długo nie pisałam, przepraszam! Ostatnio byłam bardzo zajęta pracą. Ale mam dobrą wiadomość — dostałam urlop i przez dwa tygodnie będę na wakacjach!</p>
+      <p>Planuję pojechać do Gdańska. Byłeś tam kiedyś? Słyszałam, że to piękne miasto nad morzem z ciekawą historią. Chcę zwiedzić Stare Miasto i zobaczyć słynną Fontannę Neptuna. Mam też ochotę popływać w Bałtyku, chociaż woda pewnie będzie zimna!</p>
+      <p>Zarezerwowałam mały hotel blisko centrum. Pokój jest niedrogi, ale podobno czysto i śniadanie jest wliczone w cenę. Wyjeżdżam w piątek wieczorem i wracam za dwa tygodnie. Możesz mi polecić jakieś restauracje w Gdańsku? Wiem, że lubisz dobre jedzenie!</p>
+      <p>Pozdrawiam, Anna</p>
+    </div>
+    <div class="qs-block">
+      <h4>Questions 1–5 — Text 1</h4>
+      <div class="question"><p class="q-text">1. Why hasn't Anna written for a long time?</p><div class="option-group"><button class="opt-btn" data-q="R1" data-opt="0" onclick="pick('R1',0,this)">A) She was sick</button><button class="opt-btn" data-q="R1" data-opt="1" onclick="pick('R1',1,this)">B) She was busy with work</button><button class="opt-btn" data-q="R1" data-opt="2" onclick="pick('R1',2,this)">C) She was travelling</button><button class="opt-btn" data-q="R1" data-opt="3" onclick="pick('R1',3,this)">D) She forgot</button></div></div>
+      <div class="question"><p class="q-text">2. What does Anna plan to do at the sea?</p><div class="option-group"><button class="opt-btn" data-q="R2" data-opt="0" onclick="pick('R2',0,this)">A) Take a boat trip</button><button class="opt-btn" data-q="R2" data-opt="1" onclick="pick('R2',1,this)">B) Go fishing</button><button class="opt-btn" data-q="R2" data-opt="2" onclick="pick('R2',2,this)">C) Swim in the Baltic</button><button class="opt-btn" data-q="R2" data-opt="3" onclick="pick('R2',3,this)">D) Learn to surf</button></div></div>
+      <div class="question"><p class="q-text">3. What does Anna say about her hotel?</p><div class="option-group"><button class="opt-btn" data-q="R3" data-opt="0" onclick="pick('R3',0,this)">A) It's expensive but luxurious</button><button class="opt-btn" data-q="R3" data-opt="1" onclick="pick('R3',1,this)">B) It's far from the centre</button><button class="opt-btn" data-q="R3" data-opt="2" onclick="pick('R3',2,this)">C) It's affordable with breakfast included</button><button class="opt-btn" data-q="R3" data-opt="3" onclick="pick('R3',3,this)">D) It's near the beach</button></div></div>
+      <div class="question"><p class="q-text">4. How long will Anna's holiday last?</p><div class="option-group"><button class="opt-btn" data-q="R4" data-opt="0" onclick="pick('R4',0,this)">A) One week</button><button class="opt-btn" data-q="R4" data-opt="1" onclick="pick('R4',1,this)">B) Ten days</button><button class="opt-btn" data-q="R4" data-opt="2" onclick="pick('R4',2,this)">C) Two weeks</button><button class="opt-btn" data-q="R4" data-opt="3" onclick="pick('R4',3,this)">D) Three weeks</button></div></div>
+      <div class="question"><p class="q-text">5. What does Anna ask Tomek for?</p><div class="option-group"><button class="opt-btn" data-q="R5" data-opt="0" onclick="pick('R5',0,this)">A) To come with her</button><button class="opt-btn" data-q="R5" data-opt="1" onclick="pick('R5',1,this)">B) Restaurant recommendations</button><button class="opt-btn" data-q="R5" data-opt="2" onclick="pick('R5',2,this)">C) Hotel recommendations</button><button class="opt-btn" data-q="R5" data-opt="3" onclick="pick('R5',3,this)">D) Train information</button></div></div>
+    </div>
+
+    <!-- Text 2 -->
+    <div class="text-box">
+      <h4>Text 2 — Ogłoszenie (Announcement)</h4>
+      <p><strong>Centrum Kultury w Łodzi — Bezpłatny kurs języka polskiego</strong></p>
+      <p>Zapraszamy na bezpłatny kurs języka polskiego dla dorosłych obcokrajowców. Kurs jest przeznaczony dla osób na poziomie A2–B1. Zajęcia odbywają się w każdą środę i piątek od 18:00 do 20:00. Kurs trwa trzy miesiące. Zapisy przyjmujemy do końca września.</p>
+      <p>Prowadząca: dr Zofia Wiśniewska — doświadczona lektorka z wieloletnią praktyką. Wymagania: znajomość języka polskiego na poziomie minimum A2, chęć do nauki i regularne uczestnictwo, własne materiały (zeszyt, długopis).</p>
+      <p>Liczba miejsc jest ograniczona — 20 osób. Pierwszeństwo mają osoby, które złożą formularz zgłoszeniowy jako pierwsze. Więcej informacji na stronie www.ck-lodz.pl lub w recepcji (pok. 12).</p>
+    </div>
+    <div class="qs-block">
+      <h4>Questions 6–10 — Text 2</h4>
+      <div class="question"><p class="q-text">6. Who is the course designed for?</p><div class="option-group"><button class="opt-btn" data-q="R6" data-opt="0" onclick="pick('R6',0,this)">A) Polish children</button><button class="opt-btn" data-q="R6" data-opt="1" onclick="pick('R6',1,this)">B) Adult foreigners</button><button class="opt-btn" data-q="R6" data-opt="2" onclick="pick('R6',2,this)">C) Polish teenagers</button><button class="opt-btn" data-q="R6" data-opt="3" onclick="pick('R6',3,this)">D) University students only</button></div></div>
+      <div class="question"><p class="q-text">7. How often do classes take place?</p><div class="option-group"><button class="opt-btn" data-q="R7" data-opt="0" onclick="pick('R7',0,this)">A) Once a week</button><button class="opt-btn" data-q="R7" data-opt="1" onclick="pick('R7',1,this)">B) Every day</button><button class="opt-btn" data-q="R7" data-opt="2" onclick="pick('R7',2,this)">C) Twice a week</button><button class="opt-btn" data-q="R7" data-opt="3" onclick="pick('R7',3,this)">D) Three times a week</button></div></div>
+      <div class="question"><p class="q-text">8. What is the minimum Polish level required?</p><div class="option-group"><button class="opt-btn" data-q="R8" data-opt="0" onclick="pick('R8',0,this)">A) A1</button><button class="opt-btn" data-q="R8" data-opt="1" onclick="pick('R8',1,this)">B) A2</button><button class="opt-btn" data-q="R8" data-opt="2" onclick="pick('R8',2,this)">C) B1</button><button class="opt-btn" data-q="R8" data-opt="3" onclick="pick('R8',3,this)">D) B2</button></div></div>
+      <div class="question"><p class="q-text">9. How many places are available?</p><div class="option-group"><button class="opt-btn" data-q="R9" data-opt="0" onclick="pick('R9',0,this)">A) 10</button><button class="opt-btn" data-q="R9" data-opt="1" onclick="pick('R9',1,this)">B) 15</button><button class="opt-btn" data-q="R9" data-opt="2" onclick="pick('R9',2,this)">C) 25</button><button class="opt-btn" data-q="R9" data-opt="3" onclick="pick('R9',3,this)">D) 20</button></div></div>
+      <div class="question"><p class="q-text">10. When is the registration deadline?</p><div class="option-group"><button class="opt-btn" data-q="R10" data-opt="0" onclick="pick('R10',0,this)">A) End of August</button><button class="opt-btn" data-q="R10" data-opt="1" onclick="pick('R10',1,this)">B) End of October</button><button class="opt-btn" data-q="R10" data-opt="2" onclick="pick('R10',2,this)">C) End of September</button><button class="opt-btn" data-q="R10" data-opt="3" onclick="pick('R10',3,this)">D) Beginning of October</button></div></div>
+    </div>
+
+    <!-- Text 3 -->
+    <div class="text-box">
+      <h4>Text 3 — Artykuł (Short article)</h4>
+      <p><strong>Kraków — miasto kultury i historii</strong></p>
+      <p>Kraków to jedno z najpiękniejszych miast w Polsce. Leży na południu kraju, nad rzeką Wisłą. Miasto ma ponad tysiąc lat historii i przez wiele wieków było stolicą Polski.</p>
+      <p>Centrum miasta — Stare Miasto — zostało wpisane na Listę Światowego Dziedzictwa UNESCO w 1978 roku. Najważniejszym miejscem jest Rynek Główny, jeden z największych średniowiecznych placów w Europie. Na rynku stoi gotycki Kościół Mariacki ze słynnym hejnałem, który gra co godzinę.</p>
+      <p>Na wzgórzu Wawel znajduje się zamek królewski i katedra, gdzie pochowani są polscy królowie i bohaterowie narodowi. Wawel jest symbolem polskiej historii i kultury. Kraków jest też miastem studentów — mieszka tu około 200 tysięcy studentów. Co roku do Krakowa przyjeżdżają miliony turystów z całego świata.</p>
+    </div>
+    <div class="qs-block">
+      <h4>Questions 11–15 — Text 3</h4>
+      <div class="question"><p class="q-text">11. Where is Kraków located in Poland?</p><div class="option-group"><button class="opt-btn" data-q="R11" data-opt="0" onclick="pick('R11',0,this)">A) In the north</button><button class="opt-btn" data-q="R11" data-opt="1" onclick="pick('R11',1,this)">B) In the east</button><button class="opt-btn" data-q="R11" data-opt="2" onclick="pick('R11',2,this)">C) In the south</button><button class="opt-btn" data-q="R11" data-opt="3" onclick="pick('R11',3,this)">D) In the west</button></div></div>
+      <div class="question"><p class="q-text">12. When was Kraków's Old Town added to the UNESCO list?</p><div class="option-group"><button class="opt-btn" data-q="R12" data-opt="0" onclick="pick('R12',0,this)">A) 1968</button><button class="opt-btn" data-q="R12" data-opt="1" onclick="pick('R12',1,this)">B) 1978</button><button class="opt-btn" data-q="R12" data-opt="2" onclick="pick('R12',2,this)">C) 1988</button><button class="opt-btn" data-q="R12" data-opt="3" onclick="pick('R12',3,this)">D) 1998</button></div></div>
+      <div class="question"><p class="q-text">13. How often does the Mariacki church trumpet call play?</p><div class="option-group"><button class="opt-btn" data-q="R13" data-opt="0" onclick="pick('R13',0,this)">A) Every 30 minutes</button><button class="opt-btn" data-q="R13" data-opt="1" onclick="pick('R13',1,this)">B) Every 2 hours</button><button class="opt-btn" data-q="R13" data-opt="2" onclick="pick('R13',2,this)">C) Every hour</button><button class="opt-btn" data-q="R13" data-opt="3" onclick="pick('R13',3,this)">D) Three times a day</button></div></div>
+      <div class="question"><p class="q-text">14. What is the Wawel known as?</p><div class="option-group"><button class="opt-btn" data-q="R14" data-opt="0" onclick="pick('R14',0,this)">A) The student district</button><button class="opt-btn" data-q="R14" data-opt="1" onclick="pick('R14',1,this)">B) Symbol of Polish history and culture</button><button class="opt-btn" data-q="R14" data-opt="2" onclick="pick('R14',2,this)">C) The oldest market in Poland</button><button class="opt-btn" data-q="R14" data-opt="3" onclick="pick('R14',3,this)">D) A modern tourist attraction</button></div></div>
+      <div class="question"><p class="q-text">15. How many students live in Kraków?</p><div class="option-group"><button class="opt-btn" data-q="R15" data-opt="0" onclick="pick('R15',0,this)">A) About 100,000</button><button class="opt-btn" data-q="R15" data-opt="1" onclick="pick('R15',1,this)">B) About 150,000</button><button class="opt-btn" data-q="R15" data-opt="2" onclick="pick('R15',2,this)">C) About 200,000</button><button class="opt-btn" data-q="R15" data-opt="3" onclick="pick('R15',3,this)">D) About 300,000</button></div></div>
+    </div>
+    </div><!-- end reading-static -->
+
+    <div class="sec-actions">
+      <span class="unanswered-warn" id="warn-reading"></span>
+      <button class="btn-submit-sec" onclick="submitSection('reading')">Submit &amp; Continue →</button>
+      <button class="btn-next-sec" id="next-reading" onclick="goTo('grammar',3,45*60)">Next: Grammar →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 3 — GRAMMAR
+       ══════════════════════════════════════ -->
+  <section id="screen-grammar" class="exam-screen">
+    <div class="shb">
+      <div class="shb-left"><h2>📚 Grammar (Gramatyka — Subtest 3)</h2><p>Choose the correct form to complete each sentence. All answers test B1-level grammar structures.</p></div>
+      <span class="shb-badge">Subtest 3 of 5</span>
+    </div>
+
+    <div id="grammar-content" class="grammar-grid"></div>
+    <div id="grammar-static" style="display:none"><div class="grammar-grid">
+      <div class="question"><p class="q-text">1. <em>Ona jest</em> _____ <em>(lekarka).</em></p><div class="option-group"><button class="opt-btn" data-q="G1" data-opt="0" onclick="pick('G1',0,this)">A) lekarka</button><button class="opt-btn" data-q="G1" data-opt="1" onclick="pick('G1',1,this)">B) lekarką</button><button class="opt-btn" data-q="G1" data-opt="2" onclick="pick('G1',2,this)">C) lekarce</button><button class="opt-btn" data-q="G1" data-opt="3" onclick="pick('G1',3,this)">D) lekarki</button></div></div>
+      <div class="question"><p class="q-text">2. <em>Nie mam</em> _____ <em>(czas).</em></p><div class="option-group"><button class="opt-btn" data-q="G2" data-opt="0" onclick="pick('G2',0,this)">A) czas</button><button class="opt-btn" data-q="G2" data-opt="1" onclick="pick('G2',1,this)">B) czasu</button><button class="opt-btn" data-q="G2" data-opt="2" onclick="pick('G2',2,this)">C) czasie</button><button class="opt-btn" data-q="G2" data-opt="3" onclick="pick('G2',3,this)">D) czasowi</button></div></div>
+      <div class="question"><p class="q-text">3. <em>Mieszkam w</em> _____ <em>(Warszawa).</em></p><div class="option-group"><button class="opt-btn" data-q="G3" data-opt="0" onclick="pick('G3',0,this)">A) Warszawa</button><button class="opt-btn" data-q="G3" data-opt="1" onclick="pick('G3',1,this)">B) Warszawie</button><button class="opt-btn" data-q="G3" data-opt="2" onclick="pick('G3',2,this)">C) Warszawy</button><button class="opt-btn" data-q="G3" data-opt="3" onclick="pick('G3',3,this)">D) Warszawą</button></div></div>
+      <div class="question"><p class="q-text">4. <em>Idę do</em> _____ <em>(sklep).</em></p><div class="option-group"><button class="opt-btn" data-q="G4" data-opt="0" onclick="pick('G4',0,this)">A) sklep</button><button class="opt-btn" data-q="G4" data-opt="1" onclick="pick('G4',1,this)">B) sklepu</button><button class="opt-btn" data-q="G4" data-opt="2" onclick="pick('G4',2,this)">C) sklepie</button><button class="opt-btn" data-q="G4" data-opt="3" onclick="pick('G4',3,this)">D) sklepem</button></div></div>
+      <div class="question"><p class="q-text">5. <em>Każdego dnia</em> _____ <em>do pracy.</em></p><div class="option-group"><button class="opt-btn" data-q="G5" data-opt="0" onclick="pick('G5',0,this)">A) idzie</button><button class="opt-btn" data-q="G5" data-opt="1" onclick="pick('G5',1,this)">B) chodzi</button><button class="opt-btn" data-q="G5" data-opt="2" onclick="pick('G5',2,this)">C) pójdzie</button><button class="opt-btn" data-q="G5" data-opt="3" onclick="pick('G5',3,this)">D) chodził</button></div></div>
+      <div class="question"><p class="q-text">6. <em>Właśnie</em> _____ <em>do lekarza.</em></p><div class="option-group"><button class="opt-btn" data-q="G6" data-opt="0" onclick="pick('G6',0,this)">A) chodzi</button><button class="opt-btn" data-q="G6" data-opt="1" onclick="pick('G6',1,this)">B) chodził</button><button class="opt-btn" data-q="G6" data-opt="2" onclick="pick('G6',2,this)">C) idzie</button><button class="opt-btn" data-q="G6" data-opt="3" onclick="pick('G6',3,this)">D) pójdzie</button></div></div>
+      <div class="question"><p class="q-text">7. <em>Dałem</em> _____ <em>(mama) kwiaty.</em></p><div class="option-group"><button class="opt-btn" data-q="G7" data-opt="0" onclick="pick('G7',0,this)">A) mamie</button><button class="opt-btn" data-q="G7" data-opt="1" onclick="pick('G7',1,this)">B) mamy</button><button class="opt-btn" data-q="G7" data-opt="2" onclick="pick('G7',2,this)">C) mamą</button><button class="opt-btn" data-q="G7" data-opt="3" onclick="pick('G7',3,this)">D) mama</button></div></div>
+      <div class="question"><p class="q-text">8. <em>Piję kawę z</em> _____ <em>(mleko).</em></p><div class="option-group"><button class="opt-btn" data-q="G8" data-opt="0" onclick="pick('G8',0,this)">A) mleka</button><button class="opt-btn" data-q="G8" data-opt="1" onclick="pick('G8',1,this)">B) mlekiem</button><button class="opt-btn" data-q="G8" data-opt="2" onclick="pick('G8',2,this)">C) mleku</button><button class="opt-btn" data-q="G8" data-opt="3" onclick="pick('G8',3,this)">D) mleko</button></div></div>
+      <div class="question"><p class="q-text">9. <em>Kupiłem</em> _____ <em>(nowy, f.) sukienkę.</em></p><div class="option-group"><button class="opt-btn" data-q="G9" data-opt="0" onclick="pick('G9',0,this)">A) nowe</button><button class="opt-btn" data-q="G9" data-opt="1" onclick="pick('G9',1,this)">B) nowy</button><button class="opt-btn" data-q="G9" data-opt="2" onclick="pick('G9',2,this)">C) nową</button><button class="opt-btn" data-q="G9" data-opt="3" onclick="pick('G9',3,this)">D) nowej</button></div></div>
+      <div class="question"><p class="q-text">10. <em>To prezent dla</em> _____ <em>(moja siostra).</em></p><div class="option-group"><button class="opt-btn" data-q="G10" data-opt="0" onclick="pick('G10',0,this)">A) mojej siostry</button><button class="opt-btn" data-q="G10" data-opt="1" onclick="pick('G10',1,this)">B) mojej siostrze</button><button class="opt-btn" data-q="G10" data-opt="2" onclick="pick('G10',2,this)">C) moją siostrę</button><button class="opt-btn" data-q="G10" data-opt="3" onclick="pick('G10',3,this)">D) moja siostra</button></div></div>
+      <div class="question"><p class="q-text">11. <em>Myślę o</em> _____ <em>(ty).</em></p><div class="option-group"><button class="opt-btn" data-q="G11" data-opt="0" onclick="pick('G11',0,this)">A) ty</button><button class="opt-btn" data-q="G11" data-opt="1" onclick="pick('G11',1,this)">B) tobie</button><button class="opt-btn" data-q="G11" data-opt="2" onclick="pick('G11',2,this)">C) tobą</button><button class="opt-btn" data-q="G11" data-opt="3" onclick="pick('G11',3,this)">D) cię</button></div></div>
+      <div class="question"><p class="q-text">12. <em>Lubię</em> _____ <em>książki.</em></p><div class="option-group"><button class="opt-btn" data-q="G12" data-opt="0" onclick="pick('G12',0,this)">A) przeczytać</button><button class="opt-btn" data-q="G12" data-opt="1" onclick="pick('G12',1,this)">B) czytać</button><button class="opt-btn" data-q="G12" data-opt="2" onclick="pick('G12',2,this)">C) czyta</button><button class="opt-btn" data-q="G12" data-opt="3" onclick="pick('G12',3,this)">D) przeczyta</button></div></div>
+      <div class="question"><p class="q-text">13. <em>On jest</em> _____ <em>(Niemiec).</em></p><div class="option-group"><button class="opt-btn" data-q="G13" data-opt="0" onclick="pick('G13',0,this)">A) Niemiec</button><button class="opt-btn" data-q="G13" data-opt="1" onclick="pick('G13',1,this)">B) Niemca</button><button class="opt-btn" data-q="G13" data-opt="2" onclick="pick('G13',2,this)">C) Niemcem</button><button class="opt-btn" data-q="G13" data-opt="3" onclick="pick('G13',3,this)">D) Niemcowi</button></div></div>
+      <div class="question"><p class="q-text">14. <em>Siedzę obok</em> _____ <em>(kolega).</em></p><div class="option-group"><button class="opt-btn" data-q="G14" data-opt="0" onclick="pick('G14',0,this)">A) kolega</button><button class="opt-btn" data-q="G14" data-opt="1" onclick="pick('G14',1,this)">B) kolegi</button><button class="opt-btn" data-q="G14" data-opt="2" onclick="pick('G14',2,this)">C) kolegą</button><button class="opt-btn" data-q="G14" data-opt="3" onclick="pick('G14',3,this)">D) koledze</button></div></div>
+      <div class="question"><p class="q-text">15. <em>Widzę</em> _____ <em>(stary dom).</em></p><div class="option-group"><button class="opt-btn" data-q="G15" data-opt="0" onclick="pick('G15',0,this)">A) stary dom</button><button class="opt-btn" data-q="G15" data-opt="1" onclick="pick('G15',1,this)">B) starego domu</button><button class="opt-btn" data-q="G15" data-opt="2" onclick="pick('G15',2,this)">C) staremu domowi</button><button class="opt-btn" data-q="G15" data-opt="3" onclick="pick('G15',3,this)">D) starym domem</button></div></div>
+      <div class="question"><p class="q-text">16. _____ <em>(ona) podoba się ta sukienka.</em></p><div class="option-group"><button class="opt-btn" data-q="G16" data-opt="0" onclick="pick('G16',0,this)">A) Ją</button><button class="opt-btn" data-q="G16" data-opt="1" onclick="pick('G16',1,this)">B) Jej</button><button class="opt-btn" data-q="G16" data-opt="2" onclick="pick('G16',2,this)">C) Ona</button><button class="opt-btn" data-q="G16" data-opt="3" onclick="pick('G16',3,this)">D) Je</button></div></div>
+      <div class="question"><p class="q-text">17. <em>W niedzielę zawsze</em> _____ <em>na rower.</em></p><div class="option-group"><button class="opt-btn" data-q="G17" data-opt="0" onclick="pick('G17',0,this)">A) jedzie</button><button class="opt-btn" data-q="G17" data-opt="1" onclick="pick('G17',1,this)">B) jeździ</button><button class="opt-btn" data-q="G17" data-opt="2" onclick="pick('G17',2,this)">C) pojechał</button><button class="opt-btn" data-q="G17" data-opt="3" onclick="pick('G17',3,this)">D) pojechała</button></div></div>
+      <div class="question"><p class="q-text">18. <em>W klasie jest dużo</em> _____ <em>(uczeń).</em></p><div class="option-group"><button class="opt-btn" data-q="G18" data-opt="0" onclick="pick('G18',0,this)">A) uczniów</button><button class="opt-btn" data-q="G18" data-opt="1" onclick="pick('G18',1,this)">B) uczniem</button><button class="opt-btn" data-q="G18" data-opt="2" onclick="pick('G18',2,this)">C) uczniom</button><button class="opt-btn" data-q="G18" data-opt="3" onclick="pick('G18',3,this)">D) uczniowi</button></div></div>
+      <div class="question"><p class="q-text">19. <em>Studiuję w</em> _____ <em>(Kraków).</em></p><div class="option-group"><button class="opt-btn" data-q="G19" data-opt="0" onclick="pick('G19',0,this)">A) Kraków</button><button class="opt-btn" data-q="G19" data-opt="1" onclick="pick('G19',1,this)">B) Krakowie</button><button class="opt-btn" data-q="G19" data-opt="2" onclick="pick('G19',2,this)">C) Krakowa</button><button class="opt-btn" data-q="G19" data-opt="3" onclick="pick('G19',3,this)">D) Krakowem</button></div></div>
+      <div class="question"><p class="q-text">20. <em>Interesuję się</em> _____ <em>(muzyka).</em></p><div class="option-group"><button class="opt-btn" data-q="G20" data-opt="0" onclick="pick('G20',0,this)">A) muzyki</button><button class="opt-btn" data-q="G20" data-opt="1" onclick="pick('G20',1,this)">B) muzyce</button><button class="opt-btn" data-q="G20" data-opt="2" onclick="pick('G20',2,this)">C) muzyką</button><button class="opt-btn" data-q="G20" data-opt="3" onclick="pick('G20',3,this)">D) muzyka</button></div></div>
+    </div></div></div><!-- end grammar-static -->
+
+    <div class="sec-actions">
+      <span class="unanswered-warn" id="warn-grammar"></span>
+      <button class="btn-submit-sec" onclick="submitSection('grammar')">Submit &amp; Continue →</button>
+      <button class="btn-next-sec" id="next-grammar" onclick="goTo('writing',4,0)">Next: Writing →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 4 — WRITING
+       ══════════════════════════════════════ -->
+  <section id="screen-writing" class="exam-screen">
+    <div class="shb">
+      <div class="shb-left"><h2>✍️ Writing (Pisanie — Subtest 4)</h2><p>Read the tasks below. Write your responses on paper, then use the rubric to self-assess your work.</p></div>
+      <span class="shb-badge">Subtest 4 of 5</span>
+    </div>
+
+    <div class="tip-box" style="border-left-color: var(--clr-accent-orange); margin-bottom: 20px;">
+      <strong>⏱️ Real exam: 60 minutes.</strong> Take as much time as you need here, then self-assess with the rubric below. Be honest — this is practice!
+    </div>
+
+    <div class="prompt-box">
+      <h4>Writing Task 1 — Formal email (100–130 words)</h4>
+      <p>Write a formal email to <strong>Hotel Kraków</strong> to:</p>
+      <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.8;">
+        <li>Book a double room for 3 nights (15–18 July)</li>
+        <li>Ask whether breakfast is included in the price</li>
+        <li>Ask whether there is parking available for guests</li>
+        <li>Sign the email with your own name</li>
+      </ul>
+    </div>
+
+    <div class="prompt-box">
+      <h4>Writing Task 2 — Informal message (80–120 words)</h4>
+      <p>Write a message to your Polish friend <strong>Zosia</strong>. Tell her:</p>
+      <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.8;">
+        <li>About a city you visited recently — where and when you went</li>
+        <li>What you saw and what you liked about it</li>
+        <li>Whether you would recommend it to her and why</li>
+      </ul>
+    </div>
+
+    <h3 style="font-size: 1rem; font-weight: 700; margin: 24px 0 12px;">Self-Assessment Rubric</h3>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Check each criterion that you met. Your score = number of checked items × 12.5%.</p>
+    <div class="rubric-list" id="writing-rubric">
+      <div class="rubric-item"><input type="checkbox" id="w1" onchange="calcSelf('writing')"><label for="w1">Task 1 — I wrote 100–130 words and addressed all three points (booking, breakfast, parking)</label></div>
+      <div class="rubric-item"><input type="checkbox" id="w2" onchange="calcSelf('writing')"><label for="w2">Task 1 — I used appropriate formal language (Szanowni Państwo / Z poważaniem) and correct salutation</label></div>
+      <div class="rubric-item"><input type="checkbox" id="w3" onchange="calcSelf('writing')"><label for="w3">Task 2 — I wrote 80–120 words and addressed all three points (where, what I saw, recommendation)</label></div>
+      <div class="rubric-item"><input type="checkbox" id="w4" onchange="calcSelf('writing')"><label for="w4">Task 2 — I used informal tone, greeting (Cześć Zosiu!) and closing (Pozdrawiam / Do zobaczenia)</label></div>
+      <div class="rubric-item"><input type="checkbox" id="w5" onchange="calcSelf('writing')"><label for="w5">Both tasks — I used correct past tense forms (byłem/am, widziałem/am, pojechałem/am)</label></div>
+      <div class="rubric-item"><input type="checkbox" id="w6" onchange="calcSelf('writing')"><label for="w6">Both tasks — I used case endings correctly in at least 80% of my sentences</label></div>
+      <div class="rubric-item"><input type="checkbox" id="w7" onchange="calcSelf('writing')"><label for="w7">Both tasks — I used a varied vocabulary (not repeating the same words)</label></div>
+      <div class="rubric-item"><input type="checkbox" id="w8" onchange="calcSelf('writing')"><label for="w8">Both tasks — My writing is clear, organised and the reader would understand my message</label></div>
+    </div>
+    <div id="writing-score-display" style="font-size: 1rem; font-weight: 700; margin-bottom: 20px; color: var(--text);"></div>
+
+    <div class="sec-actions">
+      <button class="btn-submit-sec" onclick="goTo('speaking',5,0)">Continue to Speaking →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 5 — SPEAKING
+       ══════════════════════════════════════ -->
+  <section id="screen-speaking" class="exam-screen">
+    <div class="shb">
+      <div class="shb-left"><h2>🗣️ Speaking (Mówienie — Subtest 5)</h2><p>Read the topic card and speak for 2–3 minutes. Record yourself or speak aloud, then self-assess.</p></div>
+      <span class="shb-badge">Subtest 5 of 5</span>
+    </div>
+
+    <div class="tip-box" style="border-left-color: var(--clr-accent-orange); margin-bottom: 20px;">
+      <strong>⏱️ Real exam: 15 minutes</strong> with an examiner who asks follow-up questions. Practice speaking for at least 2 minutes on each topic before you assess yourself.
+    </div>
+
+    <div class="prompt-box">
+      <h4>Speaking Topic 1 — Podróże i transport (Travel and transport)</h4>
+      <p>Talk about the following points in Polish:</p>
+      <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.9;">
+        <li>Describe a recent trip you made — where did you go and how did you travel?</li>
+        <li>What do you prefer: travelling by train, by car, or by plane? Why?</li>
+        <li>What do you think of public transport in Poland?</li>
+      </ul>
+    </div>
+
+    <div class="prompt-box">
+      <h4>Speaking Topic 2 — Zdrowie i sport (Health and sport)</h4>
+      <p>Talk about the following points in Polish:</p>
+      <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.9;">
+        <li>Do you do any sport or physical activity? What do you do and how often?</li>
+        <li>What do you do to stay healthy?</li>
+        <li>What sport is popular in Poland and why do you think people like it?</li>
+      </ul>
+    </div>
+
+    <h3 style="font-size: 1rem; font-weight: 700; margin: 24px 0 12px;">Self-Assessment Rubric</h3>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Check each criterion that you met. Your score = number of checked items × 12.5%.</p>
+    <div class="rubric-list" id="speaking-rubric">
+      <div class="rubric-item"><input type="checkbox" id="s1" onchange="calcSelf('speaking')"><label for="s1">I spoke for at least 2 minutes without stopping on each topic</label></div>
+      <div class="rubric-item"><input type="checkbox" id="s2" onchange="calcSelf('speaking')"><label for="s2">I addressed all three bullet points on at least one topic</label></div>
+      <div class="rubric-item"><input type="checkbox" id="s3" onchange="calcSelf('speaking')"><label for="s3">I used correct verb tenses (past, present, future) where appropriate</label></div>
+      <div class="rubric-item"><input type="checkbox" id="s4" onchange="calcSelf('speaking')"><label for="s4">I used case endings correctly in most of my sentences</label></div>
+      <div class="rubric-item"><input type="checkbox" id="s5" onchange="calcSelf('speaking')"><label for="s5">I used connectives: ponieważ, dlatego, jednak, chociaż, moim zdaniem</label></div>
+      <div class="rubric-item"><input type="checkbox" id="s6" onchange="calcSelf('speaking')"><label for="s6">My pronunciation was clear and mostly understandable</label></div>
+      <div class="rubric-item"><input type="checkbox" id="s7" onchange="calcSelf('speaking')"><label for="s7">I used varied vocabulary and avoided repeating the same simple words</label></div>
+      <div class="rubric-item"><input type="checkbox" id="s8" onchange="calcSelf('speaking')"><label for="s8">I could answer follow-up questions naturally (tried asking a friend or recording Q&amp;A)</label></div>
+    </div>
+    <div id="speaking-score-display" style="font-size: 1rem; font-weight: 700; margin-bottom: 20px; color: var(--text);"></div>
+
+    <div class="sec-actions">
+      <button class="btn-submit-sec" onclick="showResults()">Finish Exam &amp; See Results →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 6 — RESULTS
+       ══════════════════════════════════════ -->
+  <section id="screen-results" class="exam-screen">
+    <div id="results-banner" class="results-banner study-banner">
+      <h2 id="results-headline">Calculating…</h2>
+      <p id="results-sub"></p>
+    </div>
+
+    <h2 class="section-title">Results by Subtest</h2>
+    <div class="results-grid" id="results-grid"></div>
+
+    <div class="tip-box" id="results-advice" style="margin-bottom: 28px;"></div>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom: 32px;">
+      <button class="btn-retake" onclick="retakeExam()">🔄 Retake Exam</button>
+      <a class="btn-retake" href="grammar-overview.html" style="background: var(--clr-accent-orange);">📚 Review Grammar</a>
+    </div>
+
+    <!-- Official past papers -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--clr-green-bg); border-radius: 10px; padding: 20px 22px; margin-bottom: 40px;">
+      <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #16A34A; margin-bottom: 6px;">📥 Practice with Real Official Past Papers</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 14px;">These are real B1 exam papers released by the Polish State Examination Board (<em>certyfikatpolski.pl</em>). Training on official papers gives you the closest possible preparation to the real exam.</p>
+      <div class="resource-links">
+        <a href="https://certyfikatpolski.pl/wp-content/uploads/2019/09/B1_test.pdf" target="_blank" rel="noopener" class="resource-link link-green">📄 B1 Official Sample Exam (2019 PDF)</a>
+        <a href="https://certyfikatpolski.pl/wp-content/uploads/2026/01/2022.03.26-27_B1_Arkusz_egzaminacyjny.pdf" target="_blank" rel="noopener" class="resource-link link-green">📄 B1 Exam Paper — March 2022 (PDF)</a>
+        <a href="https://certyfikatpolski.pl/wp-content/uploads/2025/07/2023_02_5_6_B1_arkusz_egzaminacyjny.pdf" target="_blank" rel="noopener" class="resource-link link-green">📄 B1 Exam Paper — 2023 (PDF)</a>
+        <a href="https://certyfikatpolski.pl/o-egzaminie/testy-egzaminacyjne-z-poprzednich-lat/" target="_blank" rel="noopener" class="resource-link">📋 All Past Exam Papers → certyfikatpolski.pl</a>
+      </div>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin: 12px 0 0;">⚠️ Audio recordings for the listening sections are not publicly available. Use the <a href="listening.html" style="color: var(--clr-primary);">free B1 audio packs on the Listening page</a> to practise that skill separately.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="site-footer">
+  <div class="sf-dots"></div>
+  <div class="sf-circle1"></div>
+  <div class="sf-circle2"></div>
+  <div class="sf-main">
+    <div class="sf-author">
+      <div class="sf-photo-wrap">
+        <img src="../assets/Ahmed%20Samy%20Bakry%20Mahmoud.jpg" alt="Ahmed Samy Bakry Mahmoud">
+      </div>
+    </div>
+    <div class="sf-right">
+      <div class="sf-page-title">Polish <span>B1</span> Exam Prep</div>
+      <div class="sf-page-sub">Language Exam &nbsp;&middot;&nbsp; Complete Guide</div>
+      <div class="sf-author-credit">Made by: <strong>Ahmed Samy Bakry Mahmoud</strong></div>
+      <div class="sf-contacts-label">My Social Contacts</div>
+      <div class="sf-social-grid">
+        <a href="https://www.instagram.com/serenitydiver/" class="sf-link" target="_blank" rel="noopener" style="border-color:#E1306C35;"><span class="sf-link-icon" style="background:#E1306C20;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E1306C" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">Instagram</span><span class="sf-link-handle">serenitydiver</span></span></a>
+        <a href="https://www.linkedin.com/in/java-msdt/" class="sf-link" target="_blank" rel="noopener" style="border-color:#0A66C235;"><span class="sf-link-icon" style="background:#0A66C220;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#0A66C2" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">LinkedIn</span><span class="sf-link-handle">java-msdt</span></span></a>
+        <a href="https://www.youtube.com/@Status-Code" class="sf-link" target="_blank" rel="noopener" style="border-color:#FF000035;"><span class="sf-link-icon" style="background:#FF000018;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FF0000" xmlns="http://www.w3.org/2000/svg"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">YouTube</span><span class="sf-link-handle">@Status-Code</span></span></a>
+        <a href="https://www.facebook.com/AhmedSamySerenity" class="sf-link" target="_blank" rel="noopener" style="border-color:#1877F235;"><span class="sf-link-icon" style="background:#1877F220;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#1877F2" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></span><span class="sf-link-sub"><span class="sf-link-platform">Facebook</span><span class="sf-link-handle">AhmedSamySerenity</span></span></a>
+      </div>
+    </div>
+  </div>
+  <div class="sf-disclaimer">This site is designed for general informational purposes to streamline preparation strategy for the Long-Term EU Resident Permit language requirements in Poland. Exam center details, registration fees, and session schedules are subject to change — always verify the latest information directly with the relevant institution before booking.</div>
+  <div class="sf-flag-bottom"></div>
+</footer>
+
+<script src="../js/exam-grammar-bank.js"></script>
+<script src="../js/exam-text-bank.js"></script>
+<script src="../js/main.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   POLISH B1 MOCK EXAM — ENGINE v2
+   Random banks + localStorage history
+   ═══════════════════════════════════════════════ */
+
+var userAnswers  = {};
+var selfPct      = { writing: 0, speaking: 0 };
+var activeTimer  = null;
+var practiceMode = null; // null = full exam | 'listening'|'reading'|'grammar'|'writing'|'speaking'
+var curCorrect   = {};
+var curSections  = { listening: [], reading: [], grammar: [] };
+
+// ── HELPERS ──
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+// ── RENDER EXAM FROM BANKS ──
+function renderExam() {
+  curCorrect  = {};
+  curSections = { listening: [], reading: [], grammar: [] };
+  var hasBanks = typeof TEXT_BANK !== 'undefined' && typeof GRAMMAR_BANK !== 'undefined';
+  if (hasBanks) {
+    renderTextSection('listening', shuffle(TEXT_BANK.filter(function(t){ return t.type==='listening'; })).slice(0,6), 'L');
+    renderTextSection('reading',   shuffle(TEXT_BANK.filter(function(t){ return t.type==='reading';   })).slice(0,6), 'R');
+    renderGrammarSection(shuffle(GRAMMAR_BANK).slice(0, 40));
+    document.getElementById('listening-static').style.display = 'none';
+    document.getElementById('reading-static').style.display   = 'none';
+    document.getElementById('grammar-static').style.display   = 'none';
+  } else {
+    document.getElementById('listening-static').style.display = '';
+    document.getElementById('reading-static').style.display   = '';
+    document.getElementById('grammar-static').style.display   = '';
+    curCorrect  = {L1:1,L2:1,L3:2,L4:1,L5:2,L6:1,L7:2,L8:1,L9:2,L10:2,L11:1,L12:1,L13:2,L14:1,L15:1,R1:1,R2:2,R3:2,R4:2,R5:1,R6:1,R7:2,R8:1,R9:3,R10:2,R11:2,R12:1,R13:2,R14:1,R15:2,G1:1,G2:1,G3:1,G4:1,G5:1,G6:2,G7:0,G8:1,G9:2,G10:0,G11:1,G12:1,G13:2,G14:1,G15:0,G16:1,G17:1,G18:0,G19:1,G20:2};
+    curSections = {listening:['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11','L12','L13','L14','L15'],reading:['R1','R2','R3','R4','R5','R6','R7','R8','R9','R10','R11','R12','R13','R14','R15'],grammar:['G1','G2','G3','G4','G5','G6','G7','G8','G9','G10','G11','G12','G13','G14','G15','G16','G17','G18','G19','G20']};
+  }
+}
+
+function renderTextSection(type, texts, prefix) {
+  var container = document.getElementById(type + '-content');
+  if (!container || !texts.length) return;
+  var html = '', qNum = 1, letters = ['A','B','C','D'];
+  texts.forEach(function(text, ti) {
+    html += '<div class="text-box"><h4>' + (text.type==='listening'?'Transcript':'Text') + ' ' + (ti+1) + ' — ' + esc(text.title) + '</h4>';
+    var pending = '';
+    text.text.split('\n').forEach(function(line) {
+      var t = line.trim();
+      if (!t) { if (pending) { html += '<p>' + pending + '</p>'; pending = ''; } return; }
+      var dm = t.match(/^([A-Za-zÀ-ſ]{2,20}):\s+(.+)$/);
+      if (dm) { if (pending) { html += '<p>' + pending + '</p>'; pending = ''; } html += '<p><span class="spkr">' + esc(dm[1]) + ':</span> ' + esc(dm[2]) + '</p>'; }
+      else { pending = pending ? pending + ' ' + esc(t) : esc(t); }
+    });
+    if (pending) html += '<p>' + pending + '</p>';
+    html += '</div>';
+    html += '<div class="qs-block"><h4>Questions ' + qNum + '–' + (qNum + text.qs.length - 1) + ' — ' + (text.type==='listening'?'Transcript':'Text') + ' ' + (ti+1) + '</h4>';
+    text.qs.forEach(function(q) {
+      var qId = prefix + qNum;
+      curCorrect[qId] = q.ans; curSections[type].push(qId);
+      html += '<div class="question"><p class="q-text">' + qNum + '. ' + esc(q.q) + '</p><div class="option-group">';
+      q.opts.forEach(function(opt,oi){ html += '<button class="opt-btn" data-q="' + qId + '" data-opt="' + oi + '" onclick="pick(\'' + qId + '\',' + oi + ',this)">' + letters[oi] + ') ' + esc(opt) + '</button>'; });
+      html += '</div></div>';
+      qNum++;
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function renderGrammarSection(questions) {
+  var container = document.getElementById('grammar-content');
+  if (!container || !questions.length) return;
+  var html = '', letters = ['A','B','C','D'];
+  questions.forEach(function(q, i) {
+    var qId = 'G' + (i + 1);
+    curCorrect[qId] = q.ans; curSections.grammar.push(qId);
+    html += '<div class="question"><p class="q-text">' + (i+1) + '. <em>' + esc(q.stem) + '</em></p>';
+    if (q.hint) html += '<p style="font-size:.74rem;color:var(--text-muted);margin:-4px 0 8px;">📌 ' + esc(q.hint) + '</p>';
+    html += '<div class="option-group">';
+    q.opts.forEach(function(opt,oi){ html += '<button class="opt-btn" data-q="' + qId + '" data-opt="' + oi + '" onclick="pick(\'' + qId + '\',' + oi + ',this)">' + letters[oi] + ') ' + esc(opt) + '</button>'; });
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+// ── LOCALSTORAGE HISTORY ──
+var HIST_KEY = 'polishB1_examHistory';
+function saveResult(scores) {
+  try { var h = loadHistory(); h.unshift({ date: new Date().toISOString(), scores: scores }); if (h.length > 10) h = h.slice(0,10); localStorage.setItem(HIST_KEY, JSON.stringify(h)); } catch(e) {}
+}
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e) { return []; }
+}
+function clearHistory() {
+  try { localStorage.removeItem(HIST_KEY); } catch(e) {}
+  renderHistory();
+}
+function renderHistory() {
+  var el = document.getElementById('exam-history');
+  if (!el) return;
+  var h = loadHistory();
+  if (!h.length) { el.innerHTML = ''; return; }
+  var subs = ['listening','reading','grammar','writing','speaking'];
+  var lbls = { listening:'🎧 L', reading:'📖 R', grammar:'📚 G', writing:'✍️ W', speaking:'🗣️ S' };
+  var html = '<div class="history-wrap"><h3>📊 Your Past Results</h3><div class="history-scroll"><table class="history-tbl"><thead><tr><th>Date</th>';
+  subs.forEach(function(k){ html += '<th>' + lbls[k] + '</th>'; });
+  html += '<th>✓</th></tr></thead><tbody>';
+  h.forEach(function(a) {
+    var d = new Date(a.date);
+    var ds = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    var allPass = true;
+    html += '<tr><td>' + ds + '</td>';
+    subs.forEach(function(k){ var pct = a.scores&&a.scores[k]?(a.scores[k].pct||0):0; var pass = pct>=51; if(!pass) allPass=false; html += '<td class="' + (pass?'hist-pass':'hist-fail') + '">' + pct + '%</td>'; });
+    html += '<td>' + (allPass?'✅':'❌') + '</td></tr>';
+  });
+  html += '</tbody></table></div><button class="btn-clear-hist" onclick="clearHistory()">Clear history</button></div>';
+  el.innerHTML = html;
+}
+
+// ── SCREEN MANAGEMENT ──
+function showScreen(id) {
+  document.querySelectorAll('.exam-screen').forEach(function(s){ s.classList.remove('active'); });
+  var el = document.getElementById('screen-' + id);
+  if (el) el.classList.add('active');
+}
+
+function startExam() {
+  practiceMode = null;
+  renderExam();
+  document.getElementById('exam-topbar').classList.add('visible');
+  setStep(1);
+  showScreen('listening');
+  startTimer(40 * 60, function() { submitSection('listening'); });
+}
+
+function startPractice(sub) {
+  practiceMode = sub;
+  renderExam();
+  document.getElementById('exam-topbar').classList.add('visible');
+  var stepMap = { listening:1, reading:2, grammar:3, writing:4, speaking:5 };
+  setStep(stepMap[sub] || 1);
+  showScreen(sub);
+  var timerMap = { listening: 40*60, reading: 40*60, grammar: 45*60 };
+  if (timerMap[sub]) {
+    startTimer(timerMap[sub], function() { submitSection(sub); });
+  } else {
+    stopTimer();
+    document.getElementById('timer-display').textContent = '—';
+  }
+}
+
+function goTo(screenId, stepNum, timerSec) {
+  if (practiceMode) { showResults(); return; } // single-subtest mode → skip to results
+  setStep(stepNum); showScreen(screenId);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (timerSec > 0) {
+    startTimer(timerSec, function() {
+      if (screenId === 'reading')  submitSection('reading');
+      if (screenId === 'grammar')  submitSection('grammar');
+    });
+  } else {
+    stopTimer();
+    document.getElementById('timer-display').textContent = '—';
+  }
+}
+
+// ── TIMER ──
+function startTimer(seconds, onExpire) {
+  stopTimer();
+  var rem = seconds;
+  var el  = document.getElementById('timer-display');
+  function tick() {
+    var m = Math.floor(rem/60), s = rem%60;
+    el.textContent = m + ':' + (s<10?'0':'') + s;
+    el.className = rem<=60?'tcrit':rem<=300?'twarn':'';
+    if (rem-- <= 0) { clearInterval(activeTimer); activeTimer = null; onExpire(); }
+  }
+  tick();
+  activeTimer = setInterval(tick, 1000);
+}
+function stopTimer() { if (activeTimer) { clearInterval(activeTimer); activeTimer = null; } }
+
+// ── STEP INDICATOR ──
+function setStep(num) {
+  for (var i = 1; i <= 5; i++) {
+    var el = document.getElementById('step-' + i);
+    if (!el) continue;
+    el.className = 'exam-step' + (i<num?' done':i===num?' active':'');
+  }
+}
+
+// ── ANSWER SELECTION ──
+function pick(qId, optIdx, btn) {
+  userAnswers[qId] = optIdx;
+  btn.closest('.option-group').querySelectorAll('.opt-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+}
+
+// ── SUBMIT SECTION ──
+function submitSection(sectionId) {
+  stopTimer();
+  var keys = curSections[sectionId] || [];
+  keys.forEach(function(key) {
+    var correct = curCorrect[key], user = userAnswers[key];
+    var btns = document.querySelectorAll('[data-q="' + key + '"].opt-btn');
+    btns.forEach(function(b){ b.disabled = true; });
+    if (btns[correct]) btns[correct].classList.add('opt-correct');
+    if (user !== undefined && user !== correct && btns[user]) btns[user].classList.add('opt-wrong');
+  });
+  var submitBtn = document.querySelector('#screen-' + sectionId + ' .btn-submit-sec');
+  var nextBtn   = document.getElementById('next-' + sectionId);
+  if (submitBtn) submitBtn.style.display = 'none';
+  if (nextBtn)   nextBtn.style.display   = 'inline-block';
+  var warn = document.getElementById('warn-' + sectionId);
+  if (warn && keys.length) {
+    var c = keys.filter(function(k){ return userAnswers[k] === curCorrect[k]; }).length;
+    warn.textContent = c + ' / ' + keys.length + ' correct';
+    warn.style.color = (c / keys.length) >= 0.51 ? '#16A34A' : '#DC2626';
+  }
+  // In practice mode: relabel the next button to go straight to results
+  if (practiceMode) {
+    var nb = document.getElementById('next-' + sectionId);
+    if (nb) { nb.textContent = 'Zobacz wyniki →'; nb.onclick = function(){ showResults(); }; }
+  }
+}
+
+// ── SELF ASSESSMENT ──
+function calcSelf(type) {
+  var checked = document.querySelectorAll('#' + type + '-rubric input:checked').length;
+  selfPct[type] = Math.round(checked / 8 * 100);
+  var el = document.getElementById(type + '-score-display');
+  if (el) { var pass = selfPct[type]>=51; el.textContent = 'Your self-assessed score: ' + selfPct[type] + '% — ' + (pass?'✅ PASS':'❌ Below pass mark'); el.style.color = pass?'#16A34A':'#DC2626'; }
+}
+
+// ── RESULTS ──
+function showResults() {
+  stopTimer();
+  document.getElementById('exam-topbar').classList.remove('visible');
+  showScreen('results');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  var icons = {listening:'🎧',reading:'📖',grammar:'📚',writing:'✍️',speaking:'🗣️'};
+  var names = {listening:'Listening',reading:'Reading',grammar:'Grammar',writing:'Writing',speaking:'Speaking'};
+  var order = practiceMode ? [practiceMode] : ['listening','reading','grammar','writing','speaking'];
+  var html = '', allPass = true, failList = [], savedScores = {};
+  order.forEach(function(id) {
+    var pct, correct, total, isSelf = (id==='writing'||id==='speaking');
+    if (isSelf) { pct = selfPct[id]; }
+    else { var keys = curSections[id]||[]; correct = keys.filter(function(k){ return userAnswers[k]===curCorrect[k]; }).length; total = keys.length||1; pct = Math.round(correct/total*100); }
+    var pass = pct >= 51;
+    if (!pass) { allPass = false; failList.push(names[id]); }
+    savedScores[id] = { pct: pct };
+    html += '<div class="result-card ' + (pass?'pass':'fail') + '"><div class="rc-icon">' + icons[id] + '</div><div class="rc-name">' + names[id] + '</div>' +
+      (isSelf ? '' : '<div class="rc-score">' + correct + '/' + total + '</div>') +
+      '<div class="rc-pct">' + pct + '%</div><div class="rc-verdict">' + (pass?'✅ PASS':'❌ FAIL') + '</div>' +
+      (isSelf ? '<div class="rc-self">(self-assessed)</div>' : '') + '</div>';
+  });
+  document.getElementById('results-grid').innerHTML = html;
+  var banner = document.getElementById('results-banner');
+  if (practiceMode) {
+    banner.className = allPass ? 'results-banner pass-banner' : 'results-banner study-banner';
+    document.getElementById('results-headline').textContent = allPass ? '✅ ' + names[practiceMode] + ' — Passed!' : '📚 ' + names[practiceMode] + ' — Keep Practising';
+    document.getElementById('results-sub').textContent = allPass
+      ? 'You scored above 51% on this subtest. Try the full exam when ready.'
+      : 'You scored below 51%. Review the topic page and try this subtest again.';
+  } else if (allPass) {
+    banner.className = 'results-banner pass-banner';
+    document.getElementById('results-headline').textContent = '🎉 Congratulations — All Subtests Passed!';
+    document.getElementById('results-sub').textContent = 'You met the 51% threshold in every subtest. You are ready for the real B1 exam!';
+  } else {
+    banner.className = 'results-banner study-banner';
+    document.getElementById('results-headline').textContent = '📚 Keep Practicing!';
+    document.getElementById('results-sub').textContent = 'Revisit: ' + failList.join(', ') + '. Each retake draws a new random set of questions.';
+  }
+  var advice = document.getElementById('results-advice');
+  if (!failList.length) {
+    advice.innerHTML = '<strong>✅ Excellent work!</strong> All subtests passed. For the real exam: stay calm, read each question carefully, and manage your time.';
+  } else {
+    var tips = {Listening:'<a href="listening.html">Review Listening</a> and practice reading Polish texts aloud.',Reading:'<a href="reading.html">Review Reading</a> and skim Polish texts for key information.',Grammar:'<a href="grammar-overview.html">Work through the Grammar steps</a> — focus on the cases where you erred.',Writing:'<a href="writing.html">Review Writing</a> for templates and structure tips.',Speaking:'<a href="speaking.html">Review Speaking</a> and practice topic cards with a timer.'};
+    var tipHtml = '<strong>💡 Next steps:</strong><ul style="margin:8px 0 0;padding-left:20px;line-height:1.9">';
+    failList.forEach(function(n){ tipHtml += '<li>' + (tips[n]||n) + '</li>'; });
+    advice.innerHTML = tipHtml + '</ul>';
+  }
+  if (!practiceMode) saveResult(savedScores);
+}
+
+// ── RETAKE ──
+function retakeExam() {
+  userAnswers = {}; selfPct = { writing:0, speaking:0 }; practiceMode = null;
+  ['listening-content','reading-content','grammar-content'].forEach(function(id){ var el=document.getElementById(id); if(el) el.innerHTML=''; });
+  document.querySelectorAll('.btn-submit-sec').forEach(function(b){ b.style.display=''; });
+  document.querySelectorAll('.btn-next-sec').forEach(function(b){ b.style.display='none'; });
+  ['listening','reading','grammar'].forEach(function(id){ var w=document.getElementById('warn-'+id); if(w) w.textContent=''; });
+  document.querySelectorAll('#writing-rubric input, #speaking-rubric input').forEach(function(cb){ cb.checked=false; });
+  ['writing','speaking'].forEach(function(id){ var el=document.getElementById(id+'-score-display'); if(el) el.textContent=''; });
+  document.getElementById('exam-topbar').classList.remove('visible');
+  showScreen('intro');
+  renderHistory();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', function() { renderHistory(); });
+</script>
+<button id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Wróć na górę" title="Wróć na górę">↑</button>
+</body>
+</html>

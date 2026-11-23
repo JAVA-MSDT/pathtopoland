@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Polish B1 Exam Prep — sitemap.xml
+  BEFORE UPLOADING: replace every https://polish-b1-exam-guide-assets.s3.amazonaws.com with your real domain,
+  e.g. https://polishb1.example.com  or  https://d1abc123.cloudfront.net
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home / Overview -->
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Grammar pages -->
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-overview.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-instrumental.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-genitive.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-aspects.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-dative.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-locative.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/grammar-motion.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Exam skill pages -->
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/listening.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/reading.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/writing.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/speaking.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Resource pages -->
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/vocabulary.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/study-plan.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://polish-b1-exam-guide-assets.s3.amazonaws.com/html/exam-info.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

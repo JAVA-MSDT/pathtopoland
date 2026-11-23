@@ -1,0 +1,7 @@
+# Polish B1 Exam Prep — robots.txt
+# Update the Sitemap URL below after deploying to your S3/CloudFront domain
+
+User-agent: *
+Allow: /
+
+Sitemap: https://polish-b1-exam-guide-assets.s3.amazonaws.com/sitemap.xml

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(if \\(-not \\(Test-Path \"C:\\\\Users\\\\AhmedSamyBakryMahmou\\\\Documents\\\\Polish\\\\PolishB1\\\\html\"\\)\\) { New-Item -ItemType Directory -Path \"C:\\\\Users\\\\AhmedSamyBakryMahmou\\\\Documents\\\\Polish\\\\PolishB1\\\\html\" | Out-Null; \"Created html directory\" } else { \"html directory already exists\" })",
+      "PowerShell(cmd /c \"dir /b C:\\\\Users\\\\AhmedSamyBakryMahmou\\\\Documents\\\\Polish\\\\PolishB1\\\\html\")",
+      "WebFetch(domain:certyfikatpolski.pl)",
+      "WebSearch"
+    ]
+  }
+}
