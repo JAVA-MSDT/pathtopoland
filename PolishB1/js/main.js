@@ -1,7 +1,8 @@
 /* =====================================================
    Polish B1 Exam Prep — Main JS
    - Theme toggle (light / dark)
-   - Mobile nav toggle
+   - Mobile nav toggle + collapsible sections
+   - Unified nav dropdown menus
    - Active nav state
    - Reveal answer buttons
    ===================================================== */
@@ -45,7 +46,6 @@
       hamburger.setAttribute('aria-expanded', isOpen);
     });
 
-    // Close on outside click
     document.addEventListener('click', (e) => {
       if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
         mobileMenu.classList.remove('open');
@@ -53,51 +53,85 @@
     });
   }
 
-  /* ── ACTIVE NAV ── */
-  // Grammar sub-pages (grammar-instrumental, genitive, etc.) highlight the Grammar link
-  const GRAMMAR_PAGES = ['grammar-instrumental', 'grammar-genitive', 'grammar-aspects',
-                          'grammar-dative', 'grammar-locative', 'grammar-motion'];
+  /* ── MOBILE COLLAPSIBLE SECTIONS ── */
+  window.toggleMobileSection = function(btn) {
+    const items = btn.nextElementSibling;
+    if (!items || !items.classList.contains('mobile-section-items')) return;
+    const isOpen = items.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+  };
 
-  function setActiveNav() {
+  function initMobileCollapsibles() {
     const filename = window.location.pathname.split('/').pop() || 'index.html';
-    const base = filename.replace(/\.html$/, '');
-    const isGrammarSub = GRAMMAR_PAGES.includes(base);
-
-    document.querySelectorAll('.nav-link, .nav-mobile-menu a').forEach(link => {
-      const href = (link.getAttribute('href') || '').split('/').pop();
-      const matches =
-        href === filename ||
-        (filename === 'index.html' && href === '') ||
-        (isGrammarSub && href === 'grammar-overview.html');
-      if (matches) link.classList.add('active');
-    });
-  }
-
-  /* ── GRAMMAR DROPDOWN ── */
-  function initGrammarDropdown() {
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.nav-grammar-group')) {
-        document.querySelectorAll('.nav-grammar-dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.mobile-section-items').forEach(section => {
+      const hasActive = Array.from(section.querySelectorAll('a')).some(a =>
+        (a.getAttribute('href') || '').split('/').pop() === filename
+      );
+      if (hasActive) {
+        section.classList.add('open');
+        const btn = section.previousElementSibling;
+        if (btn && btn.classList.contains('mobile-section-toggle')) btn.classList.add('open');
       }
     });
   }
 
-  /* Exposed globally so onclick= in HTML can reach it */
-  window.toggleGrammarMenu = function(e) {
-    e.stopPropagation();
-    const group = e.currentTarget.closest('.nav-grammar-group');
-    const dd = group?.querySelector('.nav-grammar-dropdown');
+
+  /* ── UNIFIED NAV DROPDOWN MENUS ── */
+  function initNavMenus() {
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.nav-menu-group')) {
+        document.querySelectorAll('.nav-menu-dropdown').forEach(d => d.classList.remove('open'));
+      }
+    });
+  }
+
+  window.toggleNavMenu = function(btn) {
+    const group = btn.closest('.nav-menu-group');
+    const dd = group?.querySelector('.nav-menu-dropdown');
     if (!dd) return;
 
+    // Close sibling dropdowns
+    document.querySelectorAll('.nav-menu-dropdown.open').forEach(d => {
+      if (d !== dd) d.classList.remove('open');
+    });
+
     if (!dd.classList.contains('open')) {
-      // Position below the grammar group, escaping overflow context
       const rect = group.getBoundingClientRect();
       dd.style.top  = (rect.bottom + 4) + 'px';
       dd.style.left = rect.left + 'px';
     }
     dd.classList.toggle('open');
   };
+
+
+  /* ── ACTIVE NAV ── */
+  function setActiveNav() {
+    const filename = window.location.pathname.split('/').pop() || 'index.html';
+
+    // Plain nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      const href = (link.getAttribute('href') || '').split('/').pop();
+      if (href === filename || (filename === 'index.html' && href === '')) {
+        link.classList.add('active');
+      }
+    });
+
+    // Dropdown groups — highlight button if any sub-link matches current page
+    document.querySelectorAll('.nav-menu-group').forEach(group => {
+      const btn = group.querySelector('.nav-menu-btn');
+      const isActive = Array.from(group.querySelectorAll('.nav-menu-dropdown a')).some(a =>
+        (a.getAttribute('href') || '').split('/').pop() === filename
+      );
+      if (isActive && btn) btn.classList.add('active');
+    });
+
+    // Mobile menu links
+    document.querySelectorAll('.nav-mobile-menu a').forEach(link => {
+      const href = (link.getAttribute('href') || '').split('/').pop();
+      if (href === filename) link.classList.add('active');
+    });
+  }
+
 
   /* ── SCROLL-TO-TOP ── */
   function initScrollTop() {
@@ -139,8 +173,9 @@
   document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initMobileNav();
+    initMobileCollapsibles();
+    initNavMenus();
     setActiveNav();
-    initGrammarDropdown();
     initScrollTop();
     initAnswerReveal();
     initSmoothScroll();

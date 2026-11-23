@@ -36,15 +36,10 @@
   </a>
   <div class="nav-links">
     <a class="nav-link" href="../index.html">🏠 Overview</a>
-    <a class="nav-link" href="listening.html">🎧 Listening</a>
-    <a class="nav-link" href="reading.html">📖 Reading</a>
-    <div class="nav-grammar-group"><a class="nav-link" href="grammar-overview.html">📚 Grammar</a><button class="nav-grammar-arrow" onclick="toggleGrammarMenu(event)" aria-label="Grammar sub-pages"></button><div class="nav-grammar-dropdown" id="nav-grammar-dropdown"><a href="grammar-overview.html">📚 Przegląd (Overview)</a><a href="grammar-instrumental.html">① Narzędnik — Instrumental</a><a href="grammar-accusative.html">② Biernik — Accusative</a><a href="grammar-genitive.html">③ Dopełniacz — Genitive</a><a href="grammar-aspects.html">④ Aspekty — Verb Aspects</a><a href="grammar-dative.html">⑤ Celownik — Dative</a><a href="grammar-locative.html">⑥ Miejscownik — Locative</a><a href="grammar-motion.html">⑦ Ruchu — Motion</a><a href="grammar-practice.html" style="color:var(--clr-secondary);font-weight:600;">✍️ Ćwiczenia — Practice</a><a href="grammar-tools.html" style="color:#7C3AED;font-weight:600;">🔧 Narzędzia — Tools</a></div></div>
-    <a class="nav-link" href="writing.html">✍️ Writing</a>
-    <a class="nav-link" href="speaking.html">🗣️ Speaking</a>
-    <a class="nav-link" href="vocabulary.html">📝 Vocabulary</a>
-    <a class="nav-link" href="study-plan.html">📅 Study Plan</a>
-    <a class="nav-link" href="exam-info.html">🎓 Take the Exam</a>
-    <a class="nav-link" href="mock-exam.html">🎯 Mock Exam</a>
+    <div class="nav-menu-group"><button class="nav-menu-btn subtests" onclick="toggleNavMenu(this)">📋 Subtests</button><div class="nav-menu-dropdown"><a href="listening.html">🎧 Listening</a><a href="reading.html">📖 Reading</a><a href="writing.html">✍️ Writing</a><a href="speaking.html">🗣️ Speaking</a></div></div>
+    <div class="nav-menu-group"><button class="nav-menu-btn grammar" onclick="toggleNavMenu(this)">📚 Grammar</button><div class="nav-menu-dropdown"><a href="grammar-overview.html">📚 Overview</a><a href="grammar-instrumental.html">① Narzędnik — Instrumental</a><a href="grammar-accusative.html">② Biernik — Accusative</a><a href="grammar-genitive.html">③ Dopełniacz — Genitive</a><a href="grammar-aspects.html">④ Aspekty — Verb Aspects</a><a href="grammar-dative.html">⑤ Celownik — Dative</a><a href="grammar-locative.html">⑥ Miejscownik — Locative</a><a href="grammar-motion.html">⑦ Ruchu — Motion</a></div></div>
+    <div class="nav-menu-group"><button class="nav-menu-btn materials" onclick="toggleNavMenu(this)">📂 Materials</button><div class="nav-menu-dropdown"><a href="vocabulary.html">📝 Vocabulary</a><a href="study-plan.html">📅 Study Plan</a><a href="exam-info.html">🎓 Take the Exam</a></div></div>
+    <div class="nav-menu-group"><button class="nav-menu-btn practice" onclick="toggleNavMenu(this)">✍️ Practice</button><div class="nav-menu-dropdown"><a href="grammar-practice.html">✍️ Grammar Practice</a><a href="grammar-tools.html">🔧 Grammar Tools</a><a href="mock-exam.html">🎯 Mock Exam</a></div></div>
   </div>
   <div class="nav-actions">
     <button class="btn-theme" id="btn-theme" aria-label="Toggle dark/light mode" title="Toggle theme">🌙</button>
@@ -56,17 +51,36 @@
 
 <div class="nav-mobile-menu" id="nav-mobile-menu">
   <a href="../index.html">🏠 Overview</a>
-  <div class="mobile-section-label">Exam Subtests</div>
-  <a href="listening.html">🎧 Listening</a>
-  <a href="reading.html">📖 Reading</a>
-  <a href="grammar-overview.html">📚 Grammar</a>
-  <a href="writing.html">✍️ Writing</a>
-  <a href="speaking.html">🗣️ Speaking</a>
-  <div class="mobile-section-label">Resources</div>
-  <a href="vocabulary.html">📝 Vocabulary</a>
-  <a href="study-plan.html">📅 Study Plan</a>
-  <a href="exam-info.html">🎓 Take the Exam</a>
-  <a href="mock-exam.html">🎯 Mock Exam</a>
+  <button class="mobile-section-toggle" onclick="toggleMobileSection(this)">📋 Subtests</button>
+  <div class="mobile-section-items">
+    <a href="listening.html">🎧 Listening</a>
+    <a href="reading.html">📖 Reading</a>
+    <a href="writing.html">✍️ Writing</a>
+    <a href="speaking.html">🗣️ Speaking</a>
+  </div>
+  <button class="mobile-section-toggle" onclick="toggleMobileSection(this)">📚 Grammar</button>
+  <div class="mobile-section-items">
+    <a href="grammar-overview.html">📚 Overview</a>
+    <a href="grammar-instrumental.html">① Instrumental</a>
+    <a href="grammar-accusative.html">② Accusative</a>
+    <a href="grammar-genitive.html">③ Genitive</a>
+    <a href="grammar-aspects.html">④ Verb Aspects</a>
+    <a href="grammar-dative.html">⑤ Dative</a>
+    <a href="grammar-locative.html">⑥ Locative</a>
+    <a href="grammar-motion.html">⑦ Motion</a>
+  </div>
+  <button class="mobile-section-toggle" onclick="toggleMobileSection(this)">📂 Materials</button>
+  <div class="mobile-section-items">
+    <a href="vocabulary.html">📝 Vocabulary</a>
+    <a href="study-plan.html">📅 Study Plan</a>
+    <a href="exam-info.html">🎓 Take the Exam</a>
+  </div>
+  <button class="mobile-section-toggle" onclick="toggleMobileSection(this)">✍️ Practice</button>
+  <div class="mobile-section-items">
+    <a href="grammar-practice.html">✍️ Grammar Practice</a>
+    <a href="grammar-tools.html">🔧 Grammar Tools</a>
+    <a href="mock-exam.html">🎯 Mock Exam</a>
+  </div>
 </div>
 
 <main class="page-wrapper">

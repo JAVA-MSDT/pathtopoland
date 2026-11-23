@@ -400,6 +400,40 @@ img { max-width: 100%; display: block; }
   padding: 10px 12px 4px;
 }
 
+/* ── Collapsible mobile sections ── */
+.mobile-section-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 12px 4px;
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: inherit;
+  text-align: left;
+}
+.mobile-section-toggle::after {
+  content: '▶';
+  font-size: 0.6rem;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+.mobile-section-toggle.open::after { transform: rotate(90deg); }
+.mobile-section-items {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+.mobile-section-items.open { display: flex; }
+.mobile-section-items a { padding-left: 24px; }
+
 /* ══════════════════════════════════════════════════════
    PAGE LAYOUT
    ══════════════════════════════════════════════════════ */
@@ -1193,49 +1227,39 @@ tr:hover td { background: var(--bg-code); transition: background 0.12s; }
 }
 
 /* ══════════════════════════════════════════════════
-   GRAMMAR SPLIT BUTTON
+   UNIFIED NAV DROPDOWN BUTTON
    ══════════════════════════════════════════════════ */
-.nav-grammar-group {
+.nav-menu-group {
   position: relative;
+  flex-shrink: 0;
+}
+.nav-menu-btn {
   display: inline-flex;
-  align-items: stretch;
-  border-radius: 7px;
-  flex-shrink: 0;
-}
-
-/* Left part — Grammar link always styled as primary button */
-.nav-grammar-group > .nav-link {
-  background: var(--clr-primary-bg) !important;
-  color: #fff !important;
-  border-radius: 7px 0 0 7px !important;
-  padding-right: 10px !important;
-}
-.nav-grammar-group > .nav-link:hover {
-  background: var(--clr-secondary-bg) !important;
-  color: #fff !important;
-}
-
-/* Right part — arrow caret */
-.nav-grammar-arrow {
-  background: var(--clr-primary-bg);
-  color: #fff;
-  border: none;
-  border-left: 1px solid rgba(255,255,255,0.3);
-  cursor: pointer;
-  padding: 0 10px;
-  border-radius: 0 7px 7px 0;
-  display: flex;
   align-items: center;
-  font-size: 0.65rem;
-  transition: background 0.15s;
-  flex-shrink: 0;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition: filter 0.15s;
 }
-.nav-grammar-arrow::before { content: '▼'; }
-.nav-grammar-arrow:hover { background: var(--clr-secondary-bg); }
-.nav-grammar-dropdown {
+.nav-menu-btn::after { content: '▾'; font-size: 0.72rem; margin-left: 1px; }
+.nav-menu-btn:hover  { filter: brightness(1.12); }
+.nav-menu-btn.active { outline: 2px solid rgba(255,255,255,0.65); outline-offset: 1px; }
+.nav-menu-btn.subtests  { background: var(--clr-orange-bg); }
+.nav-menu-btn.grammar   { background: var(--clr-primary-bg); }
+.nav-menu-btn.materials { background: var(--clr-green-bg); }
+.nav-menu-btn.practice  { background: var(--clr-teal-bg); }
+
+.nav-menu-dropdown {
   display: none;
-  position: fixed;   /* fixed escapes overflow:auto on .nav-links */
-  min-width: 230px;
+  position: fixed;
+  min-width: 210px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -1243,8 +1267,8 @@ tr:hover td { background: var(--bg-code); transition: background 0.12s; }
   padding: 6px 0;
   z-index: 300;
 }
-.nav-grammar-dropdown.open { display: block; }
-.nav-grammar-dropdown a {
+.nav-menu-dropdown.open { display: block; }
+.nav-menu-dropdown a {
   display: block;
   padding: 8px 16px;
   color: var(--text);
@@ -1253,14 +1277,8 @@ tr:hover td { background: var(--bg-code); transition: background 0.12s; }
   transition: background 0.12s;
   white-space: nowrap;
 }
-.nav-grammar-dropdown a:hover { background: var(--bg); color: var(--clr-primary); }
-.nav-grammar-dropdown a:first-child {
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
-  padding-bottom: 10px;
-  font-weight: 600;
-}
-[data-theme="dark"] .nav-grammar-dropdown { box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+.nav-menu-dropdown a:hover { background: var(--bg); color: var(--clr-primary); }
+[data-theme="dark"] .nav-menu-dropdown { box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 
 /* ══════════════════════════════════════════════════
    SCROLL-TO-TOP BUTTON
