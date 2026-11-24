@@ -130,6 +130,105 @@
     :root[data-theme="dark"] .opt-btn.opt-correct { background:rgba(22,163,74,.18); color:#86efac; border-color:#16A34A; }
     :root[data-theme="dark"] .opt-btn.opt-wrong   { background:rgba(220,38,38,.18);  color:#fca5a5; border-color:#DC2626; }
 
+    /* ═══ FEEDBACK PANELS ═══ */
+    .q-feedback { margin-top:14px; }
+
+    /* ── Main card ── */
+    .fb-panel {
+      border-radius:10px; padding:14px 16px;
+      border:1.5px solid var(--border); background:var(--bg-card);
+      margin-bottom:8px;
+    }
+    .fb-panel.fb-ok  { border-color:#16A34A; background:rgba(22,163,74,.06); }
+    .fb-panel.fb-err { border-color:#DC2626; background:rgba(220,38,38,.06); }
+    :root[data-theme="dark"] .fb-panel.fb-ok  { background:rgba(22,163,74,.11); }
+    :root[data-theme="dark"] .fb-panel.fb-err { background:rgba(220,38,38,.11); }
+
+    .fb-status {
+      font-weight:700; font-size:.93rem; margin-bottom:10px;
+    }
+    .fb-ok  .fb-status { color:#16A34A; }
+    .fb-err .fb-status { color:#DC2626; }
+
+    /* ── Inner explanation boxes ── */
+    .fb-inner {
+      border-radius:7px; padding:11px 14px; margin-top:8px;
+      border:1px solid var(--border);
+    }
+    .fb-inner-ok  { background:rgba(22,163,74,.10); border-color:rgba(22,163,74,.30); }
+    .fb-inner-err { background:rgba(220,38,38,.10); border-color:rgba(220,38,38,.30); }
+    :root[data-theme="dark"] .fb-inner-ok  { background:rgba(22,163,74,.15); }
+    :root[data-theme="dark"] .fb-inner-err { background:rgba(220,38,38,.15); }
+
+    .fb-inner-label {
+      font-size:.68rem; font-weight:700; letter-spacing:.09em;
+      text-transform:uppercase; color:var(--text-muted); margin-bottom:5px;
+    }
+    .fb-inner-err .fb-inner-label { color:#f87171; }
+    .fb-inner-text { font-size:.86rem; line-height:1.55; color:var(--text); }
+
+    /* ── Accordion ── */
+    .fb-accord { margin-top:8px; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+    .fb-accord-hd {
+      width:100%; text-align:left; background:var(--bg-card); border:none;
+      padding:10px 14px; font-size:.85rem; font-weight:600;
+      cursor:pointer; color:var(--text); font-family:inherit;
+      transition:background var(--transition);
+    }
+    .fb-accord-hd:hover { background:var(--bg-code); }
+    .fb-accord-bd { display:none; border-top:1px solid var(--border); }
+    .fb-accord-bd.open { display:block; }
+
+    .fb-opt-row { padding:10px 14px; border-bottom:1px solid var(--border); }
+    .fb-opt-row:last-child { border-bottom:none; }
+    .fb-opt-hd { font-size:.85rem; font-weight:700; margin-bottom:3px; color:var(--text); }
+    .fb-opt-txt { font-size:.82rem; line-height:1.5; color:var(--text-muted); }
+
+    .fb-loading { text-align:center; color:var(--text-muted); font-size:0.8rem; padding:12px 0; }
+
+    /* ── Skipped variant (amber) ── */
+    .fb-panel.fb-skip { border-color:#D97706; background:rgba(217,119,6,.06); }
+    :root[data-theme="dark"] .fb-panel.fb-skip { background:rgba(217,119,6,.11); }
+    .fb-skip .fb-status { color:#D97706; }
+
+    /* ── Unanswered question yellow outline ── */
+    .q-unanswered {
+      outline:2px solid #D97706; outline-offset:3px;
+      background:rgba(217,119,6,.07) !important; border-radius:8px;
+    }
+    :root[data-theme="dark"] .q-unanswered { background:rgba(217,119,6,.12) !important; }
+
+    /* ── Unanswered confirmation modal ── */
+    .exam-modal-overlay {
+      display:none; position:fixed; inset:0; z-index:1000;
+      background:rgba(0,0,0,.55); backdrop-filter:blur(3px);
+      align-items:center; justify-content:center;
+    }
+    .exam-modal-overlay.open { display:flex; }
+    .exam-modal {
+      background:var(--bg-card); border:1.5px solid rgba(217,119,6,.55);
+      border-radius:14px; padding:28px 28px 24px;
+      max-width:420px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.45);
+      text-align:center;
+    }
+    .exam-modal-icon { font-size:2.2rem; margin-bottom:10px; }
+    .exam-modal h3   { margin:0 0 10px; font-size:1.1rem; color:var(--text); }
+    .exam-modal p    { margin:0 0 22px; font-size:.9rem; color:var(--text-muted); line-height:1.5; }
+    .exam-modal p strong { color:#D97706; }
+    .exam-modal-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    .sc-yes {
+      padding:10px 22px; border-radius:8px; border:none; cursor:pointer;
+      background:var(--clr-primary-bg); color:#fff;
+      font-weight:700; font-size:.9rem; font-family:inherit;
+    }
+    .sc-yes:hover { opacity:.88; }
+    .sc-no {
+      padding:10px 22px; border-radius:8px; cursor:pointer;
+      background:none; border:1.5px solid var(--border); color:var(--text);
+      font-weight:600; font-size:.9rem; font-family:inherit;
+    }
+    .sc-no:hover { background:var(--bg-code); }
+
     /* Grammar 2-col */
     .grammar-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     @media(max-width:720px){ .grammar-grid{ grid-template-columns:1fr; } }
@@ -483,7 +582,7 @@
 
     <div class="sec-actions">
       <span class="unanswered-warn" id="warn-listening"></span>
-      <button class="btn-submit-sec" onclick="submitSection('listening')">Submit &amp; Continue →</button>
+      <button class="btn-submit-sec" onclick="trySubmit('listening')">Submit &amp; Continue →</button>
       <button class="btn-next-sec" id="next-listening" onclick="goTo('reading',2,40*60)">Next: Reading →</button>
     </div>
   </section>
@@ -554,7 +653,7 @@
 
     <div class="sec-actions">
       <span class="unanswered-warn" id="warn-reading"></span>
-      <button class="btn-submit-sec" onclick="submitSection('reading')">Submit &amp; Continue →</button>
+      <button class="btn-submit-sec" onclick="trySubmit('reading')">Submit &amp; Continue →</button>
       <button class="btn-next-sec" id="next-reading" onclick="goTo('grammar',3,45*60)">Next: Grammar →</button>
     </div>
   </section>
@@ -594,7 +693,7 @@
 
     <div class="sec-actions">
       <span class="unanswered-warn" id="warn-grammar"></span>
-      <button class="btn-submit-sec" onclick="submitSection('grammar')">Submit &amp; Continue →</button>
+      <button class="btn-submit-sec" onclick="trySubmit('grammar')">Submit &amp; Continue →</button>
       <button class="btn-next-sec" id="next-grammar" onclick="goTo('writing',4,0)">Next: Writing →</button>
     </div>
   </section>
@@ -740,6 +839,19 @@
 </main>
 
 <!-- ══════════ FOOTER ══════════ -->
+<!-- ── Unanswered questions modal ── -->
+<div class="exam-modal-overlay" id="exam-modal-overlay">
+  <div class="exam-modal">
+    <div class="exam-modal-icon">⚠️</div>
+    <h3>Unanswered Questions</h3>
+    <p id="exam-modal-msg">You have <strong>0 questions</strong> unanswered.<br>Submit anyway or go back to answer them?</p>
+    <div class="exam-modal-actions">
+      <button class="sc-yes" id="exam-modal-yes">Submit anyway</button>
+      <button class="sc-no"  id="exam-modal-no">Go back &amp; review</button>
+    </div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="sf-dots"></div>
   <div class="sf-circle1"></div>
@@ -770,6 +882,7 @@
 <script src="../js/exam-grammar-bank.js"></script>
 <script src="../js/exam-text-bank.js"></script>
 <script src="../js/main.js"></script>
+<script src="../js/config.js"></script>
 <script>
 /* ═══════════════════════════════════════════════
    POLISH B1 MOCK EXAM — ENGINE v2
@@ -782,6 +895,8 @@ var activeTimer  = null;
 var practiceMode = null; // null = full exam | 'listening'|'reading'|'grammar'|'writing'|'speaking'
 var curCorrect   = {};
 var curSections  = { listening: [], reading: [], grammar: [] };
+var curQuestions = {}; // qId → { opts, explain? } — used for feedback panels
+var curTexts     = {}; // textId → { type, title, text, qIds[] } — used for Groq batching
 
 // ── HELPERS ──
 function esc(s) {
@@ -833,13 +948,17 @@ function renderTextSection(type, texts, prefix) {
     });
     if (pending) html += '<p>' + pending + '</p>';
     html += '</div>';
+    var textId = prefix + 'T' + (ti + 1);
+    curTexts[textId] = { type: text.type, title: text.title, text: text.text, qIds: [] };
     html += '<div class="qs-block"><h4>Questions ' + qNum + '–' + (qNum + text.qs.length - 1) + ' — ' + (text.type==='listening'?'Transcript':'Text') + ' ' + (ti+1) + '</h4>';
     text.qs.forEach(function(q) {
       var qId = prefix + qNum;
       curCorrect[qId] = q.ans; curSections[type].push(qId);
+      curQuestions[qId] = { opts: q.opts, textId: textId };
+      curTexts[textId].qIds.push(qId);
       html += '<div class="question"><p class="q-text">' + qNum + '. ' + esc(q.q) + '</p><div class="option-group">';
       q.opts.forEach(function(opt,oi){ html += '<button class="opt-btn" data-q="' + qId + '" data-opt="' + oi + '" onclick="pick(\'' + qId + '\',' + oi + ',this)">' + letters[oi] + ') ' + esc(opt) + '</button>'; });
-      html += '</div></div>';
+      html += '</div><div class="q-feedback" id="fb-' + qId + '"></div></div>';
       qNum++;
     });
     html += '</div>';
@@ -854,11 +973,12 @@ function renderGrammarSection(questions) {
   questions.forEach(function(q, i) {
     var qId = 'G' + (i + 1);
     curCorrect[qId] = q.ans; curSections.grammar.push(qId);
+    curQuestions[qId] = { opts: q.opts, explain: q.explain || null };
     html += '<div class="question"><p class="q-text">' + (i+1) + '. <em>' + esc(q.stem) + '</em></p>';
     if (q.hint) html += '<p style="font-size:.74rem;color:var(--text-muted);margin:-4px 0 8px;">📌 ' + esc(q.hint) + '</p>';
     html += '<div class="option-group">';
     q.opts.forEach(function(opt,oi){ html += '<button class="opt-btn" data-q="' + qId + '" data-opt="' + oi + '" onclick="pick(\'' + qId + '\',' + oi + ',this)">' + letters[oi] + ') ' + esc(opt) + '</button>'; });
-    html += '</div></div>';
+    html += '</div><div class="q-feedback" id="fb-' + qId + '"></div></div>';
   });
   container.innerHTML = html;
 }
@@ -976,9 +1096,71 @@ function pick(qId, optIdx, btn) {
   btn.classList.add('selected');
 }
 
+// ── SUBMIT GUARD ──
+var _pendingSubmitSection = null;
+
+function trySubmit(sectionId) {
+  var keys    = curSections[sectionId] || [];
+  var skipped = keys.filter(function(k){ return userAnswers[k] === undefined; });
+
+  if (!skipped.length) { submitSection(sectionId); return; }
+
+  // Highlight unanswered questions
+  skipped.forEach(function(k) {
+    var btns = document.querySelectorAll('[data-q="' + k + '"].opt-btn');
+    if (btns.length) btns[0].closest('.question').classList.add('q-unanswered');
+  });
+
+  // Update modal text and wire buttons
+  var n = skipped.length;
+  document.getElementById('exam-modal-msg').innerHTML =
+    'You have <strong>' + n + ' question' + (n > 1 ? 's' : '') + '</strong> unanswered.<br>Submit anyway or go back to answer them?';
+
+  _pendingSubmitSection = sectionId;
+  document.getElementById('exam-modal-overlay').classList.add('open');
+}
+
+function closeExamModal() {
+  document.getElementById('exam-modal-overlay').classList.remove('open');
+}
+
+function clearUnanswered(sectionId) {
+  document.querySelectorAll('#screen-' + sectionId + ' .q-unanswered')
+    .forEach(function(el){ el.classList.remove('q-unanswered'); });
+}
+
+// Wire modal buttons once DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('exam-modal-yes').addEventListener('click', function() {
+    closeExamModal();
+    if (_pendingSubmitSection) {
+      clearUnanswered(_pendingSubmitSection);
+      submitSection(_pendingSubmitSection);
+      _pendingSubmitSection = null;
+    }
+  });
+  document.getElementById('exam-modal-no').addEventListener('click', function() {
+    closeExamModal();
+    // Yellow highlights stay — user can scroll and answer
+    if (_pendingSubmitSection) {
+      var firstQ = document.querySelector('#screen-' + _pendingSubmitSection + ' .q-unanswered');
+      if (firstQ) firstQ.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+    _pendingSubmitSection = null;
+  });
+  // Close on backdrop click
+  document.getElementById('exam-modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeExamModal();
+      _pendingSubmitSection = null;
+    }
+  });
+});
+
 // ── SUBMIT SECTION ──
 function submitSection(sectionId) {
   stopTimer();
+  clearUnanswered(sectionId);
   var keys = curSections[sectionId] || [];
   keys.forEach(function(key) {
     var correct = curCorrect[key], user = userAnswers[key];
@@ -1002,6 +1184,179 @@ function submitSection(sectionId) {
     var nb = document.getElementById('next-' + sectionId);
     if (nb) { nb.textContent = 'Zobacz wyniki →'; nb.onclick = function(){ showResults(); }; }
   }
+  showFeedback(sectionId);
+}
+
+// ── FEEDBACK ──
+var LETTERS = ['A','B','C','D'];
+
+window.toggleAccord = function(btn) {
+  var body = btn.nextElementSibling;
+  if (!body) return;
+  var open = body.classList.toggle('open');
+  btn.textContent = (open ? '▼' : '▶') + ' Why other options are wrong';
+};
+
+function buildFeedbackHTML(qId, explains) {
+  var q       = curQuestions[qId];
+  var correct = curCorrect[qId];
+  var pick    = userAnswers[qId];
+  if (!q) return '';
+
+  var gotItRight = (pick === correct);
+  var html = '';
+
+  if (gotItRight) {
+    /* ── CORRECT ─────────────────────────────── */
+    html += '<div class="fb-panel fb-ok">';
+    html += '<div class="fb-status">✓ Correct!</div>';
+    html += '<div class="fb-inner fb-inner-ok">';
+    html += '<div class="fb-inner-text">' + esc(explains ? explains[correct] : '') + '</div>';
+    html += '</div></div>';
+
+    /* accordion — open by default */
+    var wrongs = [0,1,2,3].filter(function(i){ return i !== correct; });
+    html += '<div class="fb-accord">';
+    html += '<button class="fb-accord-hd" onclick="toggleAccord(this)">▶ Why other options are wrong</button>';
+    html += '<div class="fb-accord-bd">';
+    wrongs.forEach(function(oi) {
+      html += '<div class="fb-opt-row">';
+      html += '<div class="fb-opt-hd">' + LETTERS[oi] + ' — ' + esc(q.opts[oi]) + '</div>';
+      if (explains) html += '<div class="fb-opt-txt">' + esc(explains[oi]) + '</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+
+  } else if (pick === undefined) {
+    /* ── SKIPPED ─────────────────────────────── */
+    html += '<div class="fb-panel fb-skip">';
+    html += '<div class="fb-status">⚪ Skipped — correct answer: ' + LETTERS[correct] + '</div>';
+    html += '<div class="fb-inner fb-inner-ok">';
+    html += '<div class="fb-inner-label">Why ' + LETTERS[correct] + ' is correct:</div>';
+    if (explains) html += '<div class="fb-inner-text">' + esc(explains[correct]) + '</div>';
+    html += '</div>';
+    html += '</div>';
+    /* accordion — same as correct, collapsed by default */
+    var wrongs = [0,1,2,3].filter(function(i){ return i !== correct; });
+    html += '<div class="fb-accord">';
+    html += '<button class="fb-accord-hd" onclick="toggleAccord(this)">▶ Why other options are wrong</button>';
+    html += '<div class="fb-accord-bd">';
+    wrongs.forEach(function(oi) {
+      html += '<div class="fb-opt-row">';
+      html += '<div class="fb-opt-hd">' + LETTERS[oi] + ' — ' + esc(q.opts[oi]) + '</div>';
+      if (explains) html += '<div class="fb-opt-txt">' + esc(explains[oi]) + '</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+
+  } else {
+    /* ── WRONG ───────────────────────────────── */
+    html += '<div class="fb-panel fb-err">';
+    html += '<div class="fb-status">✗ Incorrect — correct answer: ' + LETTERS[correct] + '</div>';
+    html += '<div class="fb-inner fb-inner-err">';
+    html += '<div class="fb-inner-label">Why ' + LETTERS[pick] + ' is wrong:</div>';
+    if (explains) html += '<div class="fb-inner-text">' + esc(explains[pick]) + '</div>';
+    html += '</div>';
+    /* why correct is right — green tint */
+    html += '<div class="fb-inner fb-inner-ok">';
+    html += '<div class="fb-inner-label">Why ' + LETTERS[correct] + ' is correct:</div>';
+    if (explains) html += '<div class="fb-inner-text">' + esc(explains[correct]) + '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    /* accordion — collapsed by default, only remaining wrong options */
+    var others = [0,1,2,3].filter(function(i){ return i !== correct && i !== pick; });
+    if (others.length) {
+      html += '<div class="fb-accord">';
+      html += '<button class="fb-accord-hd" onclick="toggleAccord(this)">▶ Why other options are wrong</button>';
+      html += '<div class="fb-accord-bd">';
+      others.forEach(function(oi) {
+        html += '<div class="fb-opt-row">';
+        html += '<div class="fb-opt-hd">' + LETTERS[oi] + ' — ' + esc(q.opts[oi]) + '</div>';
+        if (explains) html += '<div class="fb-opt-txt">' + esc(explains[oi]) + '</div>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+    }
+  }
+
+  return html;
+}
+
+function showFeedback(sectionId) {
+  var keys = curSections[sectionId] || [];
+  if (sectionId === 'grammar') {
+    keys.forEach(function(qId) {
+      var el = document.getElementById('fb-' + qId);
+      if (!el) return;
+      var q = curQuestions[qId];
+      el.innerHTML = buildFeedbackHTML(qId, q ? q.explain : null);
+    });
+  } else {
+    // listening / reading — show loading, then batch-fetch per text
+    keys.forEach(function(qId) {
+      var el = document.getElementById('fb-' + qId);
+      if (el) el.innerHTML = '<div class="fb-loading">⏳ Loading explanation…</div>';
+    });
+    var byText = {};
+    keys.forEach(function(qId) {
+      var q = curQuestions[qId];
+      if (!q || !q.textId) return;
+      if (!byText[q.textId]) byText[q.textId] = [];
+      byText[q.textId].push(qId);
+    });
+    Object.keys(byText).forEach(function(textId) {
+      fetchTextExplanations(textId, byText[textId]);
+    });
+  }
+}
+
+function fetchTextExplanations(textId, qIds) {
+  var textObj = curTexts[textId];
+  var apiKey  = (typeof window !== 'undefined' && window.GROQ_KEY) || '';
+  if (!textObj || !apiKey) {
+    qIds.forEach(function(qId) {
+      var el = document.getElementById('fb-' + qId);
+      if (el) el.innerHTML = buildFeedbackHTML(qId, null);
+    });
+    return;
+  }
+  var qList = qIds.map(function(qId) {
+    var q = curQuestions[qId];
+    return { qId: qId, opts: q.opts, correct: curCorrect[qId] };
+  });
+  var prompt =
+    'You are a Polish B1 exam expert. For each question below about the passage, write exactly one short sentence explaining why each answer option is correct or incorrect. Base every explanation strictly on the passage content.\n\n' +
+    'PASSAGE:\n' + textObj.text + '\n\n' +
+    'Return ONLY a JSON array — no prose, no markdown:\n' +
+    '[{"qId":"...","explanations":["A reason","B reason","C reason","D reason"]}, ...]\n\n' +
+    'Questions:\n' +
+    qList.map(function(qd) {
+      return 'qId ' + qd.qId + ': ' + qd.opts.map(function(o,i){ return LETTERS[i]+') '+o; }).join(' | ') + ' (correct: ' + LETTERS[qd.correct] + ')';
+    }).join('\n');
+
+  fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: prompt }], temperature: 0.3, max_tokens: 1200 })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var raw = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content || '';
+    var m = raw.match(/\[[\s\S]*\]/);
+    if (!m) throw new Error('no json');
+    var results = JSON.parse(m[0]);
+    results.forEach(function(item) {
+      var el = document.getElementById('fb-' + item.qId);
+      if (el) el.innerHTML = buildFeedbackHTML(item.qId, item.explanations);
+    });
+  })
+  .catch(function() {
+    qIds.forEach(function(qId) {
+      var el = document.getElementById('fb-' + qId);
+      if (el) el.innerHTML = buildFeedbackHTML(qId, null);
+    });
+  });
 }
 
 // ── SELF ASSESSMENT ──
